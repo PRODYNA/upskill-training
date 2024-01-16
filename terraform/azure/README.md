@@ -29,13 +29,13 @@ az login
 Switch to the right subscription
 
 ```bash
-az account set --subscription cd4b198a-f112-461a-a3c3-d3d33c059e5caz account set --subscription 
+az account set --subscription cd4b198a-f112-461a-a3c3-d3d33c059e5caz
 ```
 
 Run terraform plan
 
 ```bash
-terraform plan -o planfile
+terraform plan -o planfile -var 'project_name=mhauber' -var 'resource_group_name=aks-wks-matthias.hauber-ad320'
 ```
 
 Run terraform apply
