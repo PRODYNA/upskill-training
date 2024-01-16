@@ -1,0 +1,32 @@
+# === Build Stage ===
+FROM golang:1.21.5-alpine3.19 AS build
+
+WORKDIR /app
+
+# Copy only the necessary files for building
+COPY src/go.mod src/go.sum ./
+RUN go mod download
+
+# Copy the entire source code
+COPY src .
+
+# Build the Go application
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
+
+# === Final Stage ===
+FROM golang:1.21.5-alpine3.19
+
+USER 10001:10001
+
+ENV WELCOME_MSG="Hi there"
+
+WORKDIR /app
+
+EXPOSE 8080
+
+# Copy only the built binary from the build stage
+COPY --from=build /app/main .
+COPY --from=build /app/favicon.ico .
+
+# Command to run the executable
+ENTRYPOINT ["./main"]
