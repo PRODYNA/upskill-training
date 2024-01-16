@@ -15,17 +15,17 @@ resource "azurerm_kubernetes_cluster" "main" {
 
   # default node pool is always of Mode "System"
   default_node_pool {
-    name                 = "system"
-    vm_size              = var.aks.default_node_pool.vm_size
-    os_disk_type         = "Managed"
-    type                 = "VirtualMachineScaleSets"
-    enable_auto_scaling  = true
-    min_count            = var.aks.default_node_pool.min_count
-    max_count            = var.aks.default_node_pool.max_count
+    name                = "system"
+    vm_size             = var.aks.default_node_pool.vm_size
+    os_disk_type        = "Managed"
+    type                = "VirtualMachineScaleSets"
+    enable_auto_scaling = true
+    min_count           = var.aks.default_node_pool.min_count
+    max_count           = var.aks.default_node_pool.max_count
     # vnet_subnet_id       = azurerm_subnet.k8s.id
     orchestrator_version = var.aks.version.node_pool
     upgrade_settings {
-      max_surge       = "10%"
+      max_surge = "10%"
     }
   }
 
@@ -70,7 +70,7 @@ resource "azurerm_kubernetes_cluster" "main" {
 
 # for nginx to be able to get the ip
 resource "azurerm_role_assignment" "aks_rg_nw_contr" {
-  principal_id         = azurerm_kubernetes_cluster.main.identity[ 0 ].principal_id
+  principal_id         = azurerm_kubernetes_cluster.main.identity[0].principal_id
   scope                = data.azurerm_resource_group.main.id
   role_definition_name = "Network Contributor"
 }
@@ -84,7 +84,7 @@ resource "azurerm_role_assignment" "aks_cluster_admin_to_sp" {
 
 # allow cluster to pull images from acr
 resource "azurerm_role_assignment" "aks_acr_pull" {
-  principal_id         = azurerm_kubernetes_cluster.main.kubelet_identity[ 0 ].object_id
+  principal_id         = azurerm_kubernetes_cluster.main.kubelet_identity[0].object_id
   scope                = azurerm_container_registry.main.id
   role_definition_name = "AcrPull"
 }

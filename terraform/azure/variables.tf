@@ -6,10 +6,10 @@ variable "environment" {
 variable "project_name" {
   type    = string
   default = "project"
-} 
+}
 
 variable "resource_group_name" {
-  type    = string
+  type = string
 }
 
 variable "aks" {
@@ -30,6 +30,6 @@ variable "aks" {
 
 variable "enable_ddos_protection" {
   description = "Enable DDoS protection on the AKS cluster Ingress IP"
-  type    = bool
-  default = false
+  type        = bool
+  default     = false
 }
