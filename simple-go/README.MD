@@ -1,11 +1,9 @@
-# build
+# Source of simple-app
 
-```bash
-./build-push-image-distroless.sh <tagOrUserName>
-./build-push-image.sh <tagOrUserName>
-```
+Simple app is written in go
 
-# paths:
+
+paths:
 
 ```
 / (just a start page, background color is set by BG_COLOR env var)
