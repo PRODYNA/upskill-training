@@ -4,9 +4,14 @@ resource "helm_release" "ingress_nginx" {
   chart            = "ingress-nginx"
   name             = "ingress-nginx"
   namespace        = "ingress-nginx"
+  force_update     = true
   create_namespace = true
   set {
-    name  = "controller.service.annotations.service.beta.kubernetes.io/azure-load-balancer-health-probe-request-path"
+    name  = "defaultBackend.enabled"
+    value = "true"
+  }
+  set {
+    name  = "controller.service.annotations.\"service\\.beta\\.kubernetes\\.io/azure-load-balancer-health-probe-request-path\""
     value = "/healthz"
   }
   set {
@@ -14,7 +19,7 @@ resource "helm_release" "ingress_nginx" {
     value = data.azurerm_public_ip.ingress.ip_address
   }
   set {
-    name  = "controller.service.annotations.service.beta.kubernetes.io/azure-load-balancer-resource-group"
+    name  = "controller.service.annotations.\"service\\.beta\\.kubernetes\\.io/azure-load-balancer-resource-group\""
     value = var.resource_group_name
   }
 }
