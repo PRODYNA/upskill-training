@@ -26,7 +26,16 @@ we will use again terraform. You can use the same commands as previously to depl
     terraform init
     ```
 
-3. **Plan the deployment**
+3. **Configure deployment**
+
+    Terraform needs to know in which resource group it should deploy the Azure resources. To do so, create a `terraform.auto.tfvars` file and add the following content:
+
+    ```ini
+    resource_group_name=<resource_group_name>
+    project_name=<shortProjectNameWithOneWord>
+    ```
+
+4. **Plan the deployment**
 
     Use the `terraform plan` command to see what Terraform will do before actually doing it:
 
@@ -34,7 +43,7 @@ we will use again terraform. You can use the same commands as previously to depl
     terraform plan
     ```
 
-6. **Apply the changes**
+5. **Apply the changes**
 
     Apply the changes with the `terraform apply` command:
 
