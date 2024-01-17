@@ -1,0 +1,33 @@
+controller:
+  replicaCount: 2
+  watchIngressWithoutClass: false
+  ingressClassResource:
+    name: nginx
+    enabled: true
+    default: true
+  metrics:
+  service:
+    nodePorts:
+      http: 32080
+      https: 32443
+    externalTrafficPolicy: Local
+    annotations:
+      # see https://github.com/Azure/AKS/issues/2907
+      service.beta.kubernetes.io/azure-load-balancer-health-probe-request-path: /healthz
+  opentelemetry:
+    enabled: true
+  config:
+    enable-opentelemetry: "true"
+    otlp-collector-host: opentelemetry-collector.observability
+    otel-service-name: ingress-nginx
+    opentelemetry-operation-name: "HTTP $request_method $service_name $uri"
+    opentelemetry-trust-incoming-span: "true"
+    otlp-collector-port: "4317"
+    otel-max-queuesize: "2048"
+    otel-schedule-delay-millis: "5000"
+    otel-max-export-batch-size: "512"
+    otel-sampler: "AlwaysOn" # Also: AlwaysOff, TraceIdRatioBased
+    otel-sampler-ratio: "1.0"
+    otel-sampler-parent-based: "false"
+defaultBackend:
+  enabled: true
