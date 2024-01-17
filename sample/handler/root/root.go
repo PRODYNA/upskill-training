@@ -1,16 +1,21 @@
 package root
 
 import (
+	_ "embed"
 	"github.com/prodyna/kuka-training/sample/telemetry"
 	"net/http"
+)
+
+var (
+	//go:embed index.html
+	indexHtml []byte
 )
 
 func RootHandler(writer http.ResponseWriter, request *http.Request) {
 	_, span := telemetry.Tracer().Start(request.Context(), "RootHandler")
 	defer span.End()
 
-	// json response with hello world and status 200
-	writer.Header().Set("Content-Type", "application/json")
+	writer.Header().Set("Content-Type", "text/html")
 	writer.WriteHeader(http.StatusOK)
-	writer.Write([]byte(`{"message": "Hello, World!"}`))
+	writer.Write(indexHtml)
 }
