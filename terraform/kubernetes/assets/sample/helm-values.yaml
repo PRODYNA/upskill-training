@@ -1,0 +1,24 @@
+ingress:
+  enabled: true
+  className: "nginx"
+  hosts:
+    # TODO: This URL is currently hardcoded. It should be dynamically generated.
+    - host: sample.20.103.19.159.traefik.me
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+env:
+  - name: "OPENTELEMETRY_ENDPOINT"
+    value: "opentelemetry-collector.observability:4317"
+autoscaling:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 60
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
