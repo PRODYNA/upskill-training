@@ -8,6 +8,18 @@ resource "kubernetes_namespace" "observability" {
   }
 }
 
+resource "kubernetes_secret" "opentelemetry-collector" {
+  metadata {
+    name      = "opentelemetry-collector-instrumentation-key"
+    namespace = kubernetes_namespace.opentelemetry-collector.metadata[0].name
+  }
+  data = {
+    "instrumentation-key" = data.terraform_remote_state.azure.outputs.appi_instrumentation_key
+  }
+  type = "Opaque"
+}
+
+
 # https://artifacthub.io/packages/helm/opentelemetry-helm/opentelemetry-collector
 resource "helm_release" "opentelemetry-collector" {
   repository       = "https://open-telemetry.github.io/opentelemetry-helm-charts"

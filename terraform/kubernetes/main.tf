@@ -51,6 +51,14 @@ provider "helm" {
 
 data "azurerm_client_config" "current" {}
 
+data "terraform_remote_state" "azure" {
+  backend = "local"
+
+  config = {
+    path = "../azure/terraform.tfstate"
+  }
+}
+
 data "azurerm_resource_group" "main" {
   name = var.resource_group_name
 }
