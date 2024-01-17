@@ -10,7 +10,6 @@ import (
 	"github.com/prodyna/kuka-training/sample/handler/env"
 	"github.com/prodyna/kuka-training/sample/handler/health"
 	"github.com/prodyna/kuka-training/sample/handler/pi"
-	"github.com/prodyna/kuka-training/sample/handler/root"
 	"github.com/prodyna/kuka-training/sample/meta"
 	"github.com/prodyna/kuka-training/sample/telemetry"
 	"github.com/riandyrn/otelchi"
@@ -96,10 +95,11 @@ func main() {
 	r.Use(httplog.RequestLogger(reqlog))
 	r.Use(otelchi.Middleware("sample"))
 
-	r.Get("/", root.RootHandler)
+	// r.Get("/", root.RootHandler)
 	r.Get("/health", health.HealthHandler)
 	r.Get("/env", env.EnvHandler)
 	r.Get("/pi/{duration}", pi.PiHandler)
+	r.Handle("/static/*", http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
 
 	go func() {
 		port := fmt.Sprintf(":%s", flag.Lookup(portKey).Value)

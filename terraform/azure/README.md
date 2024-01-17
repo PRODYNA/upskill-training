@@ -46,4 +46,18 @@ terraform plan -o planfile -var 'project_name=<shortName>' -var 'resource_group_
 terraform apply planfile
 ```
 
+Terraform apply also automatically get the Kubernetes credentials. You can verify that using:
+
+```
+kubectl config get-contexts
+```
+
+5. **Convert login**
+
+Normally you would need to use devicelogin to login to the ACR. To make it easier to use the ACR you can convert the login to azurecli.
+
+```bash
+kubelogin convert-kubeconfig --login azurecli
+```
+
 After terraform has finished the run you should see the resources in your resource group in the Azure portal.
