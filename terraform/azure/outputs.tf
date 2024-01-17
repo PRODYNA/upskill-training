@@ -10,3 +10,11 @@ output "appi_instrumentation_key" {
   value = azurerm_application_insights.monitoring.instrumentation_key
   sensitive = true
 }
+
+output "fq_image_name" {
+  value = "${azurerm_container_registry.main.login_server}/${local.image.tag}"
+}
+
+output "image_tag" {
+  value = local.image.tag
+}

@@ -11,7 +11,7 @@ resource "null_resource" "waitcr" {
 # Build container image insize of ACR
 resource "null_resource" "build_web" {
   provisioner "local-exec" {
-    command = "az acr build -r ${azurerm_container_registry.main.name} -t sample:1.0 ../../sample"
+    command = "az acr build -r ${azurerm_container_registry.main.name} -t ${local.image.repository}:${local.image.tag} ../../sample"
   }
   depends_on = [
     null_resource.waitcr

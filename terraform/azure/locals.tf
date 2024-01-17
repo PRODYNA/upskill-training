@@ -6,4 +6,8 @@ locals {
     project = var.project_name
   }
   resource_prefix = "${local.tags.project}-${local.loc_short}-${local.tags.env}"
+  image = {
+    repository = "samle"
+    tag        = "1.0"
+  }
 }
