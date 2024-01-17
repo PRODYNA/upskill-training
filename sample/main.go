@@ -33,7 +33,7 @@ const (
 func main() {
 	flag.String(portKey, LookupEnvOrString("PORT", "8000"), "port to listen on (PORT)")
 	flag.Int(verboseKey, LookupEnvOrInt("VERBOSE", 0), "verbosity level (VERBOSE)")
-	flag.String(opentelemetryEndpointKey, LookupEnvOrString("OPENTELEMETRY_ENDPOINT", ""), "telemetry endpoint (OPENTELEMETRY_ENDPOINT)")
+	flag.String(opentelemetryEndpointKey, LookupEnvOrString("OPENTELEMETRY_ENDPOINT", ""), "OpenTelemetry endpoint (OPENTELEMETRY_ENDPOINT)")
 	flag.String("logformat", LookupEnvOrString("LOGFORMAT", "text"), "log format either json or text (LOGFORMAT)")
 	flag.Bool("help", false, "show help")
 	flag.Parse()
@@ -45,7 +45,7 @@ func main() {
 
 	jsonLog := flag.Lookup(logformatKey).Value.String() == "json"
 
-	reqlog := httplog.NewLogger("httplog-example", httplog.Options{
+	reqlog := httplog.NewLogger(meta.Name, httplog.Options{
 		JSON:             jsonLog,
 		LogLevel:         slog.LevelDebug,
 		Concise:          true,
@@ -65,15 +65,15 @@ func main() {
 	})
 
 	slog.Info("Configuration",
-		"port", flag.Lookup("port").Value,
-		"verbose", flag.Lookup("verbose").Value,
-		"telemetry-endpoint", flag.Lookup("telemetry-endpoint").Value)
+		portKey, flag.Lookup(portKey).Value,
+		verboseKey, flag.Lookup(verboseKey).Value,
+		opentelemetryEndpointKey, flag.Lookup(opentelemetryEndpointKey).Value)
 
 	var shutdown func(ctx context.Context) error
 	opentelemetryEndpoint := flag.Lookup(opentelemetryEndpointKey).Value.String()
 	if opentelemetryEndpoint != "" {
 		slog.Info("OpenTelemetry enabled", "endpoint", opentelemetryEndpoint)
-		sd, err := telemetry.InitOpenTelemetry(context.Background(), "sample", meta.Version, opentelemetryEndpoint)
+		sd, err := telemetry.InitOpenTelemetry(context.Background(), meta.Name, meta.Version, opentelemetryEndpoint)
 		if err != nil {
 			slog.Error("Failed to initialize OpenTelemetry", "error", err)
 			return
