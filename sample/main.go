@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"github.com/go-chi/chi/v5"
@@ -10,11 +11,14 @@ import (
 	"github.com/prodyna/kuka-training/sample/handler/health"
 	"github.com/prodyna/kuka-training/sample/handler/pi"
 	"github.com/prodyna/kuka-training/sample/handler/root"
+	"github.com/prodyna/kuka-training/sample/meta"
+	"github.com/prodyna/kuka-training/sample/telemetry"
 	"github.com/riandyrn/otelchi"
 	"log/slog"
 	"net/http"
 	"os"
 	"os/signal"
+	"strconv"
 	"syscall"
 	"time"
 )
@@ -22,25 +26,35 @@ import (
 const (
 	portKey                  = "port"
 	verboseKey               = "verbose"
-	opentelemetryEndpointKey = "opentelemetry-endpoint"
+	opentelemetryEndpointKey = "telemetry-endpoint"
+	logformatKey             = "logformat"
 )
 
 func main() {
-	flag.String(portKey, "8000", "port to listen on")
-	flag.Int(verboseKey, 0, "verbosity level")
-	flag.String(opentelemetryEndpointKey, "", "opentelemetry endpoint")
+	flag.String(portKey, LookupEnvOrString("PORT", "8080"), "port to listen on (PORT)")
+	flag.Int(verboseKey, LookupEnvOrInt("VERBOSE", 0), "verbosity level (VERBOSE)")
+	flag.String(opentelemetryEndpointKey, LookupEnvOrString("OPENTELEMETRY_ENDPOINT", ""), "telemetry endpoint (OPENTELEMETRY_ENDPOINT)")
+	flag.String("logformat", LookupEnvOrString("LOGFORMAT", "text"), "log format either json or text (LOGFORMAT)")
+	flag.Bool("help", false, "show help")
 	flag.Parse()
 
+	if flag.Lookup("help").Value.String() == "true" {
+		flag.Usage()
+		return
+	}
+
+	jsonLog := flag.Lookup(logformatKey).Value.String() == "json"
+
 	reqlog := httplog.NewLogger("httplog-example", httplog.Options{
-		// JSON:             true,
+		JSON:             jsonLog,
 		LogLevel:         slog.LevelDebug,
 		Concise:          true,
 		RequestHeaders:   true,
 		MessageFieldName: "message",
-		// TimeFieldFormat: time.RFC850,
+		TimeFieldFormat:  time.DateTime,
 		Tags: map[string]string{
-			"version": "v1.0-81aa4244d9fc8076a",
-			"env":     "dev",
+			"app":     meta.Name,
+			"version": meta.Version,
 		},
 		QuietDownRoutes: []string{
 			"/",
@@ -50,7 +64,24 @@ func main() {
 		// SourceFieldName: "source",
 	})
 
-	slog.Info("Configuration", "port", flag.Lookup("port").Value, "verbose", flag.Lookup("verbose").Value)
+	slog.Info("Configuration",
+		"port", flag.Lookup("port").Value,
+		"verbose", flag.Lookup("verbose").Value,
+		"telemetry-endpoint", flag.Lookup("telemetry-endpoint").Value)
+
+	var shutdown func(ctx context.Context) error
+	opentelemetryEndpoint := flag.Lookup(opentelemetryEndpointKey).Value.String()
+	if opentelemetryEndpoint != "" {
+		slog.Info("OpenTelemetry enabled", "endpoint", opentelemetryEndpoint)
+		sd, err := telemetry.InitOpenTelemetry(context.Background(), "sample", meta.Version, opentelemetryEndpoint)
+		if err != nil {
+			slog.Error("Failed to initialize OpenTelemetry", "error", err)
+			return
+		}
+		shutdown = sd
+	} else {
+		slog.Info("OpenTelemetry disabled")
+	}
 
 	done := make(chan os.Signal, 1)
 	signal.Notify(done, syscall.SIGINT, syscall.SIGTERM)
@@ -80,5 +111,30 @@ func main() {
 
 	<-done
 	slog.Info("Shutting down server")
+	if shutdown != nil {
+		slog.Info("Shutting down OpenTelemetry")
+		err := shutdown(context.Background())
+		if err != nil {
+			slog.Error("Failed to shutdown OpenTelemetry", "error", err)
+		}
+	}
 
+}
+
+func LookupEnvOrString(key string, defaultVal string) string {
+	if val, ok := os.LookupEnv(key); ok {
+		return val
+	}
+	return defaultVal
+}
+
+func LookupEnvOrInt(key string, defaultVal int) int {
+	if val, ok := os.LookupEnv(key); ok {
+		v, err := strconv.Atoi(val)
+		if err != nil {
+			slog.Error("Failed to parse environment variable", "key", key, "value", val, "error", err)
+		}
+		return v
+	}
+	return defaultVal
 }

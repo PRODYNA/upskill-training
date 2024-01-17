@@ -1,8 +1,10 @@
 package pi
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/go-chi/chi/v5"
+	"github.com/prodyna/kuka-training/sample/telemetry"
 	"math/big"
 	"net/http"
 	"runtime"
@@ -17,6 +19,9 @@ type PiResponse struct {
 }
 
 func PiHandler(writer http.ResponseWriter, request *http.Request) {
+	ctx, span := telemetry.Tracer().Start(request.Context(), "PiHandler")
+	defer span.End()
+
 	durationStr := chi.URLParam(request, "duration")
 	duration, err := strconv.Atoi(durationStr)
 	if err != nil || duration <= 0 {
@@ -29,7 +34,7 @@ func PiHandler(writer http.ResponseWriter, request *http.Request) {
 	for i := 0; i < runtime.NumCPU(); i++ {
 		go func() {
 			defer wg.Done()
-			calculatePiWithDuration(duration)
+			calculatePiWithDuration(ctx, duration)
 		}()
 	}
 	wg.Wait()
@@ -50,7 +55,10 @@ func PiHandler(writer http.ResponseWriter, request *http.Request) {
 	_, _ = writer.Write(resonseJson)
 }
 
-func calculatePiWithDuration(duration int) {
+func calculatePiWithDuration(ctx context.Context, duration int) {
+	ctx, span := telemetry.Tracer().Start(ctx, "calculatePiWithDuration")
+	defer span.End()
+
 	startTime := time.Now()
 
 	for time.Since(startTime).Seconds() < float64(duration) {
