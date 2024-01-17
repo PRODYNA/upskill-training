@@ -10,6 +10,8 @@ FROM alpine
 
 COPY --from=0 /build/sample /
 
+ENV LOGFORMAT=json
+
 EXPOSE 8000
 
 ENTRYPOINT ["/sample"]
