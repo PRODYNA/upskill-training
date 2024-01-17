@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/prodyna/kuka-training/sample/meta"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace"
 	metric2 "go.opentelemetry.io/otel/metric"
 	trace2 "go.opentelemetry.io/otel/trace"
@@ -156,9 +157,9 @@ func newMeterProvider(ctx context.Context, res *resource.Resource, endpoint stri
 }
 
 func Tracer() trace2.Tracer {
-	return otel.Tracer("yasm-proxy-odbc")
+	return otel.Tracer(meta.Name)
 }
 
 func Meter() metric2.Meter {
-	return otel.Meter("yasm-proxy-odbc")
+	return otel.Meter(meta.Name)
 }

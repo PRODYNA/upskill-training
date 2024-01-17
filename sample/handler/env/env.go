@@ -1,7 +1,9 @@
 package env
 
 import (
+	"context"
 	"encoding/json"
+	"github.com/prodyna/kuka-training/sample/telemetry"
 	"net/http"
 	"os"
 	"strings"
@@ -12,7 +14,10 @@ type EnvVar struct {
 	Value string
 }
 
-func GetEnvironmentVariables() (envVar []EnvVar) {
+func GetEnvironmentVariables(ctx context.Context) (envVar []EnvVar) {
+	ctx, span := telemetry.Tracer().Start(ctx, "GetEnvironmentVariables")
+	defer span.End()
+
 	for _, e := range os.Environ() {
 		pair := strings.SplitN(e, "=", 2)
 		envVar = append(envVar, EnvVar{Name: pair[0], Value: pair[1]})
@@ -21,7 +26,10 @@ func GetEnvironmentVariables() (envVar []EnvVar) {
 }
 
 func EnvHandler(writer http.ResponseWriter, request *http.Request) {
-	envVars := GetEnvironmentVariables()
+	ctx, span := telemetry.Tracer().Start(request.Context(), "EnvHandler")
+	defer span.End()
+
+	envVars := GetEnvironmentVariables(ctx)
 	envVarsJson, err := json.Marshal(envVars)
 	if err != nil {
 		http.Error(writer, err.Error(), http.StatusInternalServerError)
