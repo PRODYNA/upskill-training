@@ -8,13 +8,13 @@ resource "kubernetes_namespace" "observability" {
   }
 }
 
-resource "kubernetes_secret" "opentelemetry-collector" {
+resource "kubernetes_secret" "azuremonitorr" {
   metadata {
-    name      = "opentelemetry-collector-instrumentation-key"
-    namespace = kubernetes_namespace.opentelemetry-collector.metadata[0].name
+    name      = "azuremonitor"
+    namespace = kubernetes_namespace.observability.metadata[0].name
   }
   data = {
-    "instrumentation-key" = data.terraform_remote_state.azure.outputs.appi_instrumentation_key
+    "AZURE_MONITOR_INSTRUMENTATION_KEY" = data.terraform_remote_state.azure.outputs.appi_instrumentation_key
   }
   type = "Opaque"
 }

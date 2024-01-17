@@ -13,10 +13,7 @@ resource "helm_release" "ingress_nginx" {
   version          = "v4.9.0"
   force_update     = true
   create_namespace = false
-  set {
-    name  = "defaultBackend.enabled"
-    value = "true"
-  }
+
   set {
     name  = "controller.service.annotations.\"service\\.beta\\.kubernetes\\.io/azure-load-balancer-health-probe-request-path\""
     value = "/healthz"
@@ -27,7 +24,7 @@ resource "helm_release" "ingress_nginx" {
   }
   set {
     name  = "controller.service.annotations.\"service\\.beta\\.kubernetes\\.io/azure-load-balancer-resource-group\""
-    value = var.resource_group_name
+    value = data.azurerm_resource_group.main.name
   }
 
   values = [
