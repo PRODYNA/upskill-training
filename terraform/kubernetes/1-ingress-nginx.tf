@@ -9,10 +9,6 @@ resource "helm_release" "ingress_nginx" {
   create_namespace = true
 
   set {
-    name  = "controller.service.annotations.\"service\\.beta\\.kubernetes\\.io/azure-load-balancer-health-probe-request-path\""
-    value = "/healthz"
-  }
-  set {
     name  = "controller.service.loadBalancerIP"
     value = data.azurerm_public_ip.ingress.ip_address
   }
