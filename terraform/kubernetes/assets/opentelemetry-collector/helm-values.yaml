@@ -55,7 +55,7 @@ presets:
   # Best used with mode = deployment or statefulset.
   # See https://opentelemetry.io/docs/kubernetes/collector/components/#kubernetes-cluster-receiver for details on the receiver.
   clusterMetrics:
-    enabled: true
+    enabled: false
 
 # Base collector configuration.
 # Supports templating. To escape existing instances of {{ }}, use {{` <original content> `}}.
@@ -63,7 +63,7 @@ presets:
 config:
   exporters:
     azuremonitor:
-      instrumentation_key=${env:AZURE_MONITOR_INSTRUMENTATION_KEY}
+      instrumentation_key: ${env:AZURE_MONITOR_INSTRUMENTATION_KEY}
   extensions:
     health_check: {}
     memory_ballast: {}
@@ -100,7 +100,8 @@ config:
           - jaeger
           - zipkin
 
-
+service:
+  enabled: true
 
 extraEnvsFrom:
   - secretRef:

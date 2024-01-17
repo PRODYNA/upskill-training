@@ -5,7 +5,6 @@ controller:
     name: nginx
     enabled: true
     default: true
-  metrics:
   service:
     nodePorts:
       http: 32080
