@@ -26,6 +26,18 @@ variable "aks" {
       node_pool     = string
     })
   })
+  default = {
+    default_node_pool = {
+      vm_size   = "Standard_B2ms"
+      min_count = 1
+      max_count = 1
+    }
+
+    version = {
+      control_plane = "1.28.3"
+      node_pool     = "1.28.3"
+    }
+  }
 }
 
 variable "enable_ddos_protection" {
