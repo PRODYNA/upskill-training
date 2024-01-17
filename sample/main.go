@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"github.com/go-chi/chi/v5"
@@ -10,6 +11,8 @@ import (
 	"github.com/prodyna/kuka-training/sample/handler/health"
 	"github.com/prodyna/kuka-training/sample/handler/pi"
 	"github.com/prodyna/kuka-training/sample/handler/root"
+	"github.com/prodyna/kuka-training/sample/telemetry"
+	"github.com/prodyna/kuka-training/sample/version"
 	"github.com/riandyrn/otelchi"
 	"log"
 	"log/slog"
@@ -24,14 +27,14 @@ import (
 const (
 	portKey                  = "port"
 	verboseKey               = "verbose"
-	opentelemetryEndpointKey = "opentelemetry-endpoint"
+	opentelemetryEndpointKey = "telemetry-endpoint"
 	logformatKey             = "logformat"
 )
 
 func main() {
 	flag.String(portKey, LookupEnvOrString("PORT", "8080"), "port to listen on (PORT)")
 	flag.Int(verboseKey, LookupEnvOrInt("VERBOSE", 0), "verbosity level (VERBOSE)")
-	flag.String(opentelemetryEndpointKey, LookupEnvOrString("OPENTELEMETRY_ENDPOINT", ""), "opentelemetry endpoint (OPENTELEMETRY_ENDPOINT)")
+	flag.String(opentelemetryEndpointKey, LookupEnvOrString("OPENTELEMETRY_ENDPOINT", ""), "telemetry endpoint (OPENTELEMETRY_ENDPOINT)")
 	flag.String("logformat", LookupEnvOrString("LOGFORMAT", "text"), "log format either json or text (LOGFORMAT)")
 	flag.Bool("help", false, "show help")
 	flag.Parse()
@@ -51,7 +54,7 @@ func main() {
 		MessageFieldName: "message",
 		TimeFieldFormat:  time.DateTime,
 		Tags: map[string]string{
-			"version": "1.0",
+			"version": version.Version,
 		},
 		QuietDownRoutes: []string{
 			"/",
@@ -64,7 +67,21 @@ func main() {
 	slog.Info("Configuration",
 		"port", flag.Lookup("port").Value,
 		"verbose", flag.Lookup("verbose").Value,
-		"opentelemetry-endpoint", flag.Lookup("opentelemetry-endpoint").Value)
+		"telemetry-endpoint", flag.Lookup("telemetry-endpoint").Value)
+
+	var shutdown func(ctx context.Context) error
+	opentelemetryEndpoint := flag.Lookup(opentelemetryEndpointKey).Value.String()
+	if opentelemetryEndpoint != "" {
+		slog.Info("OpenTelemetry enabled", "endpoint", opentelemetryEndpoint)
+		sd, err := telemetry.InitOpenTelemetry(context.Background(), "sample", version.Version, opentelemetryEndpoint)
+		if err != nil {
+			slog.Error("Failed to initialize OpenTelemetry", "error", err)
+			return
+		}
+		shutdown = sd
+	} else {
+		slog.Info("OpenTelemetry disabled")
+	}
 
 	done := make(chan os.Signal, 1)
 	signal.Notify(done, syscall.SIGINT, syscall.SIGTERM)
@@ -94,6 +111,13 @@ func main() {
 
 	<-done
 	slog.Info("Shutting down server")
+	if shutdown != nil {
+		slog.Info("Shutting down OpenTelemetry")
+		err := shutdown(context.Background())
+		if err != nil {
+			slog.Error("Failed to shutdown OpenTelemetry", "error", err)
+		}
+	}
 
 }
 
