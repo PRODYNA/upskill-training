@@ -11,10 +11,9 @@ import (
 	"github.com/prodyna/kuka-training/sample/handler/health"
 	"github.com/prodyna/kuka-training/sample/handler/pi"
 	"github.com/prodyna/kuka-training/sample/handler/root"
+	"github.com/prodyna/kuka-training/sample/meta"
 	"github.com/prodyna/kuka-training/sample/telemetry"
-	"github.com/prodyna/kuka-training/sample/version"
 	"github.com/riandyrn/otelchi"
-	"log"
 	"log/slog"
 	"net/http"
 	"os"
@@ -54,7 +53,8 @@ func main() {
 		MessageFieldName: "message",
 		TimeFieldFormat:  time.DateTime,
 		Tags: map[string]string{
-			"version": version.Version,
+			"app":     meta.Name,
+			"version": meta.Version,
 		},
 		QuietDownRoutes: []string{
 			"/",
@@ -73,7 +73,7 @@ func main() {
 	opentelemetryEndpoint := flag.Lookup(opentelemetryEndpointKey).Value.String()
 	if opentelemetryEndpoint != "" {
 		slog.Info("OpenTelemetry enabled", "endpoint", opentelemetryEndpoint)
-		sd, err := telemetry.InitOpenTelemetry(context.Background(), "sample", version.Version, opentelemetryEndpoint)
+		sd, err := telemetry.InitOpenTelemetry(context.Background(), "sample", meta.Version, opentelemetryEndpoint)
 		if err != nil {
 			slog.Error("Failed to initialize OpenTelemetry", "error", err)
 			return
@@ -132,7 +132,7 @@ func LookupEnvOrInt(key string, defaultVal int) int {
 	if val, ok := os.LookupEnv(key); ok {
 		v, err := strconv.Atoi(val)
 		if err != nil {
-			log.Fatalf("LookupEnvOrInt[%s]: %v", key, err)
+			slog.Error("Failed to parse environment variable", "key", key, "value", val, "error", err)
 		}
 		return v
 	}
