@@ -1,4 +1,4 @@
-# Terraform for installing Azure resources
+# Terraform for creating Azure resources
 
 ## Content
 
@@ -18,30 +18,32 @@ Create an AKS with the following features
 * Public facing
 * No AD integration
 
-## Running
+## Run terraform to create the resources in azure
 
-Login to Azure using
+## Steps
+
+1. **Login to Azure**
 
 ```bash
 az login
 ```
 
-Switch to the right subscription
+2. **Switch to the right subscription**
 
 ```bash
 az account set --subscription cd4b198a-f112-461a-a3c3-d3d33c059e5caz
 ```
 
-Run terraform plan
+3. **Run terraform plan**
 
 ```bash
-terraform plan -o planfile -var 'project_name=mhauber' -var 'resource_group_name=aks-wks-matthias.hauber-ad320'
+terraform plan -o planfile -var 'project_name=<shortName>' -var 'resource_group_name=<resourceGroupName>'
 ```
 
-Run terraform apply
+4. **Run terraform apply**
 
 ```bash
 terraform apply planfile
 ```
 
-After the run you should see an AKS in your resource group
+After terraform has finished the run you should see the resources in your resource group in the Azure portal.
