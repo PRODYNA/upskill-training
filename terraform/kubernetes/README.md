@@ -31,8 +31,8 @@ we will use again terraform. You can use the same commands as previously to depl
     Terraform needs to know in which resource group it should deploy the Azure resources. To do so, create a `terraform.auto.tfvars` file and add the following content:
 
     ```ini
-    resource_group_name=<resource_group_name>
-    project_name=<shortProjectNameWithOneWord>
+    resource_group_name="<resource_group_name>"
+    project_name="<shortProjectNameWithOneWord>"
     ```
 
 4. **Plan the deployment**
