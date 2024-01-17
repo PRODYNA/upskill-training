@@ -60,15 +60,15 @@ data "terraform_remote_state" "azure" {
 }
 
 data "azurerm_resource_group" "main" {
-  name = var.resource_group_name
+  name = data.terraform_remote_state.azure.outputs.resource_group_name
 }
 
 data "azurerm_kubernetes_cluster" "aks" {
   name                = "${local.resource_prefix}-aks-main"
-  resource_group_name = var.resource_group_name
+  resource_group_name = data.azurerm_resource_group.main.name
 }
 
 data "azurerm_public_ip" "ingress" {
   name                = "${local.resource_prefix}-pip-ingress"
-  resource_group_name = var.resource_group_name
+  resource_group_name = data.azurerm_resource_group.main.name
 }

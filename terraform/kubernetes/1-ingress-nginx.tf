@@ -27,7 +27,7 @@ resource "helm_release" "ingress_nginx" {
   }
   set {
     name  = "controller.service.annotations.\"service\\.beta\\.kubernetes\\.io/azure-load-balancer-resource-group\""
-    value = var.resource_group_name
+    value = data.azurerm_resource_group.main.name
   }
 
   values = [

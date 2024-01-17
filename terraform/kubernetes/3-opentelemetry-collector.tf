@@ -11,7 +11,7 @@ resource "kubernetes_namespace" "observability" {
 resource "kubernetes_secret" "opentelemetry-collector" {
   metadata {
     name      = "opentelemetry-collector-instrumentation-key"
-    namespace = kubernetes_namespace.opentelemetry-collector.metadata[0].name
+    namespace = kubernetes_namespace.observability.metadata[0].name
   }
   data = {
     "instrumentation-key" = data.terraform_remote_state.azure.outputs.appi_instrumentation_key
