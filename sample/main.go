@@ -31,7 +31,7 @@ const (
 )
 
 func main() {
-	flag.String(portKey, LookupEnvOrString("PORT", "8080"), "port to listen on (PORT)")
+	flag.String(portKey, LookupEnvOrString("PORT", "8000"), "port to listen on (PORT)")
 	flag.Int(verboseKey, LookupEnvOrInt("VERBOSE", 0), "verbosity level (VERBOSE)")
 	flag.String(opentelemetryEndpointKey, LookupEnvOrString("OPENTELEMETRY_ENDPOINT", ""), "telemetry endpoint (OPENTELEMETRY_ENDPOINT)")
 	flag.String("logformat", LookupEnvOrString("LOGFORMAT", "text"), "log format either json or text (LOGFORMAT)")

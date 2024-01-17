@@ -2,15 +2,22 @@ package health
 
 import (
 	"encoding/json"
+	"github.com/prodyna/kuka-training/sample/meta"
 	"net/http"
 )
 
 type Status struct {
-	Status string `json:"status"`
+	Name    string `json:"name"`
+	Version string `json:"version"`
+	Status  string `json:"status"`
 }
 
 func HealthHandler(writer http.ResponseWriter, request *http.Request) {
-	status := Status{Status: "OK"}
+	status := Status{
+		Name:    meta.Name,
+		Version: meta.Version,
+		Status:  "OK",
+	}
 	statusJson, err := json.Marshal(status)
 	if err != nil {
 		writer.WriteHeader(http.StatusInternalServerError)
