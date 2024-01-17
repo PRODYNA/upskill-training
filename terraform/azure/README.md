@@ -31,7 +31,7 @@ az login
 2. **Switch to the right subscription**
 
 ```bash
-az account set --subscription cd4b198a-f112-461a-a3c3-d3d33c059e5caz
+az account set --subscription cd4b198a-f112-461a-a3c3-d3d33c059e5c
 ```
 
 3. **Run terraform plan**
