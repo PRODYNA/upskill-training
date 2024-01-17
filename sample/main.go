@@ -20,13 +20,15 @@ import (
 )
 
 const (
-	portKey    = "port"
-	verboseKey = "verbose"
+	portKey                  = "port"
+	verboseKey               = "verbose"
+	opentelemetryEndpointKey = "opentelemetry-endpoint"
 )
 
 func main() {
 	flag.String(portKey, "8000", "port to listen on")
 	flag.Int(verboseKey, 0, "verbosity level")
+	flag.String(opentelemetryEndpointKey, "", "opentelemetry endpoint")
 	flag.Parse()
 
 	reqlog := httplog.NewLogger("httplog-example", httplog.Options{
@@ -66,7 +68,7 @@ func main() {
 	r.Get("/", root.RootHandler)
 	r.Get("/health", health.HealthHandler)
 	r.Get("/env", env.EnvHandler)
-	r.Get("/pi", pi.PiHandler)
+	r.Get("/pi/{duration}", pi.PiHandler)
 
 	go func() {
 		port := fmt.Sprintf(":%s", flag.Lookup(portKey).Value)
