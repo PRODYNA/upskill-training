@@ -2,9 +2,9 @@
 # Enable log collection
 # Send traces, metrics and logs to Azure Monitor
 
-resource "kubernetes_namespace" "opentelemetry-collector" {
+resource "kubernetes_namespace" "observability" {
   metadata {
-    name = "opentelemetry-collector"
+    name = "observability"
   }
 }
 
@@ -13,7 +13,7 @@ resource "helm_release" "opentelemetry-collector" {
   repository       = "https://open-telemetry.github.io/opentelemetry-helm-charts"
   chart            = "opentelemetry-collector"
   name             = "opentelemetry-collector"
-  namespace        = kubernetes_namespace.opentelemetry-collector.metadata[0].name
+  namespace        = kubernetes_namespace.observability.metadata[0].name
   version          = "0.78.0"
   create_namespace = false
   force_update     = true
