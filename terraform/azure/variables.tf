@@ -8,8 +8,18 @@ variable "project_name" {
   default = "project"
 }
 
+variable "cloudflare_zone_id" {
+  type    = string
+  default = "93c4d56b0f391d3d3baf00845877f42b" # should be in a secret
+}
+
 variable "resource_group_name" {
   type = string
+}
+
+variable "cloudflare_api_token" {
+  type    = string
+  default = "bxAwoD13eVTrF4oKXicCYxApw4EHUyYEvgakDcHd" # should be in a secret
 }
 
 variable "aks" {
