@@ -12,7 +12,7 @@ output "appi_instrumentation_key" {
 }
 
 output "fq_image_name" {
-  value = "${azurerm_container_registry.main.login_server}/${local.image.tag}"
+  value = "${azurerm_container_registry.main.login_server}/${local.image.repository}"
 }
 
 output "image_tag" {

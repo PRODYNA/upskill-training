@@ -9,7 +9,7 @@ resource "null_resource" "waitcr" {
 }
 
 # Build container image insize of ACR
-resource "null_resource" "build_web" {
+resource "null_resource" "build_sample" {
   provisioner "local-exec" {
     command = "az acr build -r ${azurerm_container_registry.main.name} -t ${local.image.repository}:${local.image.tag} ../../sample"
   }
