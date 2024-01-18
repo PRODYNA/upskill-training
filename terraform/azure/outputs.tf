@@ -18,3 +18,11 @@ output "fq_image_name" {
 output "image_tag" {
   value = local.image.tag
 }
+
+output "project_name" {
+  value = var.project_name
+}
+
+output "environment" {
+  value = var.environment
+}
