@@ -14,6 +14,7 @@ type EnvVar struct {
 	Value string
 }
 
+// GetEnvironmentVariables returns the environment variables of the application
 func GetEnvironmentVariables(ctx context.Context) (envVar []EnvVar) {
 	ctx, span := telemetry.Tracer().Start(ctx, "GetEnvironmentVariables")
 	defer span.End()
@@ -25,6 +26,7 @@ func GetEnvironmentVariables(ctx context.Context) (envVar []EnvVar) {
 	return
 }
 
+// createEnvHandler creates a handler that returns the environment variables of the application as JSON structure
 func EnvHandler(writer http.ResponseWriter, request *http.Request) {
 	ctx, span := telemetry.Tracer().Start(request.Context(), "EnvHandler")
 	defer span.End()
@@ -32,6 +34,7 @@ func EnvHandler(writer http.ResponseWriter, request *http.Request) {
 	envVars := GetEnvironmentVariables(ctx)
 	envVarsJson, err := json.Marshal(envVars)
 	if err != nil {
+		span.RecordError(err)
 		http.Error(writer, err.Error(), http.StatusInternalServerError)
 		return
 	}

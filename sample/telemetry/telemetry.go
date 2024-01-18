@@ -156,10 +156,12 @@ func newMeterProvider(ctx context.Context, res *resource.Resource, endpoint stri
 	return meterProvider, nil
 }
 
+// Provide a tracer
 func Tracer() trace2.Tracer {
 	return otel.Tracer(meta.Name)
 }
 
+// Provide a metrics
 func Meter() metric2.Meter {
 	return otel.Meter(meta.Name)
 }

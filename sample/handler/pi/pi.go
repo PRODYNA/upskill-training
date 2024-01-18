@@ -76,7 +76,5 @@ func calculatePiWithDuration(ctx context.Context, duration int) {
 		pi := new(big.Float).SetFloat64(3.0)
 		pi.Add(pi, result)
 
-		// The result is not used; this is just to consume CPU resources
-		_ = pi
 	}
 }
