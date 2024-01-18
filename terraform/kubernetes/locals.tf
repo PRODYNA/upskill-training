@@ -3,7 +3,7 @@ locals {
   loc_short = "weu"
   tags = {
     env     = var.environment
-    project = var.project_name
+    project = data.terraform_remote_state.azure.outputs.project_name
   }
   resource_prefix = "${local.tags.project}-${local.loc_short}-${local.tags.env}"
 }
