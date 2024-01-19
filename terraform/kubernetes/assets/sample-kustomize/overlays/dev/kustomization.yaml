@@ -1,0 +1,31 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+metadata:
+  name: sample
+
+# reference to the base directory
+# kustomize will take everything from that directory
+bases:
+- ../../base
+
+# all kubernetes resources will be prefixed with dev-
+namePrefix: dev-
+
+# all kubernetes resources will have the label env: dev
+commonLabels:
+  env: dev
+
+# replace the value of the host in the ingress
+patches:
+- patch: |-
+    - op: replace
+      path : /spec/tls/0/hosts/0
+      value: dev.example.com
+  target:
+    kind: Ingress
+    name: sample
+
+# replace the image tag
+images:
+  - name: registry/sample
+    newTag: v1.0.2-beta

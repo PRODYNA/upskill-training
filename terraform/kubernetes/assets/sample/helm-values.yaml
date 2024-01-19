@@ -1,12 +1,19 @@
 ingress:
   enabled: true
   className: "nginx"
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-sample
+  tls:
+  - hosts:
+    - example.com
+    secretName: sample-cert
   hosts:
     # TODO: This URL is currently hardcoded. It should be dynamically generated.
-    - host: sample.20.103.19.159.traefik.me
+    - host: example.com
       paths:
         - path: /
           pathType: ImplementationSpecific
+
 env:
   - name: "OPENTELEMETRY_ENDPOINT"
     value: "opentelemetry-collector.observability:4317"

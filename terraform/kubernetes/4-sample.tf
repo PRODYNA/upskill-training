@@ -11,6 +11,10 @@ resource "helm_release" "sample" {
   chart = "../../helm/sample"
   namespace = kubernetes_namespace.sample.metadata[0].name
   set {
+    name = "ingress.tls[0].hosts[0]"
+    value = data.terraform_remote_state.azure.outputs.ingress_name
+  }
+  set {
     name = "image.repository"
     value = data.terraform_remote_state.azure.outputs.fq_image_name
   }
