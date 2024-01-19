@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sample
+  labels:
+    app.kubernetes.io/name: sample
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: sample
+  template:
+    spec:
+      serviceAccountName: sample
+      containers:
+        - name: sample
+          image: registry/sample
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8000
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+          envFrom:
+          - configMapRef:
+              name: sample-config
+          resources:
+            limits:
+              cpu: 100m
+              memory: 128Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi

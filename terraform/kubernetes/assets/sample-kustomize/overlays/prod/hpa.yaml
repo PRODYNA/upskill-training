@@ -1,0 +1,9 @@
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: sample
+  labels:
+    app.kubernetes.io/name: sample
+spec:
+  minReplicas: 2
+  maxReplicas: 5

@@ -5,14 +5,15 @@ ingress:
     cert-manager.io/cluster-issuer: letsencrypt-sample
   tls:
   - hosts:
-    - will.be.replaced
+    - example.com
     secretName: sample-cert
   hosts:
     # TODO: This URL is currently hardcoded. It should be dynamically generated.
-    - host: mhauber.prodyna.wtf
+    - host: example.com
       paths:
         - path: /
           pathType: ImplementationSpecific
+
 env:
   - name: "OPENTELEMETRY_ENDPOINT"
     value: "opentelemetry-collector.observability:4317"
