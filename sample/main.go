@@ -13,6 +13,7 @@ import (
 	"github.com/prodyna/kuka-training/sample/handler/root"
 	"github.com/prodyna/kuka-training/sample/meta"
 	"github.com/prodyna/kuka-training/sample/telemetry"
+	"github.com/prodyna/kuka-training/sample/telemetry/metrics"
 	"github.com/riandyrn/otelchi"
 	"log/slog"
 	"net/http"
@@ -68,6 +69,12 @@ func main() {
 		portKey, flag.Lookup(portKey).Value,
 		verboseKey, flag.Lookup(verboseKey).Value,
 		opentelemetryEndpointKey, flag.Lookup(opentelemetryEndpointKey).Value)
+
+	slog.Info("Initializing metrics")
+	err := metrics.Init()
+	if err != nil {
+		slog.Error("Failed to initialize metrics", "error", err)
+	}
 
 	var shutdown func(ctx context.Context) error
 	opentelemetryEndpoint := flag.Lookup(opentelemetryEndpointKey).Value.String()
