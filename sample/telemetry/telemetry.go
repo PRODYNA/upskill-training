@@ -113,14 +113,19 @@ func newMetricExporter(ctx context.Context, endpoint string) (exporter *otlpmetr
 }
 
 func newResource(serviceName string, serviceVersion string) (*resource.Resource, error) {
-	return resource.Merge(
-		resource.Default(),
-		resource.NewWithAttributes(
-			semconv.SchemaURL,
-			semconv.ServiceName(serviceName),
-			semconv.ServiceVersion(serviceVersion),
-		),
-	)
+	return resource.NewWithAttributes(
+		semconv.SchemaURL,
+		semconv.ServiceName(serviceName),
+		semconv.ServiceVersion(serviceVersion),
+	), nil
+	//return resource.Merge(
+	// resource.Default(),
+	// resource.NewWithAttributes(
+	// semconv.SchemaURL,
+	// semconv.ServiceName(serviceName),
+	// semconv.ServiceVersion(serviceVersion)) //
+	//),
+	//)
 }
 
 func newPropagator() propagation.TextMapPropagator {
