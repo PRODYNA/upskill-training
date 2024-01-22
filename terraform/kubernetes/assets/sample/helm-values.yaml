@@ -6,9 +6,8 @@ ingress:
   tls:
   - hosts:
     - example.com
-    secretName: sample-cert
+    secretName: sample-tls
   hosts:
-    # TODO: This URL is currently hardcoded. It should be dynamically generated.
     - host: example.com
       paths:
         - path: /

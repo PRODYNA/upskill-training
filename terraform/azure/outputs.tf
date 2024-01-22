@@ -26,3 +26,7 @@ output "project_name" {
 output "environment" {
   value = var.environment
 }
+
+output "ingress_name" {
+  value = cloudflare_record.prodyna-wtf.hostname
+}
