@@ -6,8 +6,7 @@ import (
 )
 
 var (
-	PiCounter      metric.Int64Counter
-	RequestCounter metric.Int64Counter
+	PiCounter metric.Int64Counter
 )
 
 func Init() (err error) {
@@ -18,9 +17,5 @@ func Init() (err error) {
 		return err
 	}
 
-	RequestCounter, err = meter.Int64Counter("sample_request counter", metric.WithDescription("Request Counter"))
-	if err != nil {
-		return err
-	}
 	return nil
 }

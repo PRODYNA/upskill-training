@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"github.com/go-chi/chi/v5"
 	"github.com/prodyna/kuka-training/sample/telemetry"
+	"github.com/prodyna/kuka-training/sample/telemetry/metrics"
 	"math/big"
 	"net/http"
 	"runtime"
@@ -77,4 +78,6 @@ func calculatePiWithDuration(ctx context.Context, duration int) {
 		pi.Add(pi, result)
 
 	}
+
+	metrics.PiCounter.Add(ctx, 1)
 }

@@ -96,12 +96,19 @@ func main() {
 	// create chi router
 	r := chi.NewRouter()
 
+	requestCount, err := metrics.NewRequestCountHandler()
+	if err != nil {
+		slog.Error("Failed to create request count handler", "error", err)
+		return
+	}
+
 	// add otelchi middleware
 	r.Use(middleware.RequestID)
 	r.Use(middleware.RealIP)
 	r.Use(middleware.Recoverer)
 	r.Use(httplog.RequestLogger(reqlog))
 	r.Use(otelchi.Middleware("sample"))
+	r.Use(requestCount.RequestCount)
 
 	r.Get("/", root.RootHandler)
 	r.Get("/health", health.HealthHandler)
