@@ -3,12 +3,11 @@ package metrics
 import (
 	"github.com/prodyna/kuka-training/sample/telemetry"
 	"go.opentelemetry.io/otel/metric"
-	"log/slog"
 	"net/http"
 )
 
 type RequestCountHandler struct {
-	Counter metric.Int64Counter
+	counter metric.Int64Counter
 }
 
 func NewRequestCountHandler() (*RequestCountHandler, error) {
@@ -17,15 +16,14 @@ func NewRequestCountHandler() (*RequestCountHandler, error) {
 		return nil, err
 	}
 	return &RequestCountHandler{
-		Counter: counter,
+		counter: counter,
 	}, nil
 }
 
 func (rch *RequestCountHandler) RequestCount(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
-		rch.Counter.Add(ctx, 1)
-		slog.Info("Incrementing counter")
+		rch.counter.Add(ctx, 1)
 		next.ServeHTTP(rw, r.WithContext(ctx))
 	})
 }

@@ -70,12 +70,6 @@ func main() {
 		verboseKey, flag.Lookup(verboseKey).Value,
 		opentelemetryEndpointKey, flag.Lookup(opentelemetryEndpointKey).Value)
 
-	slog.Info("Initializing metrics")
-	err := metrics.Init()
-	if err != nil {
-		slog.Error("Failed to initialize metrics", "error", err)
-	}
-
 	var shutdown func(ctx context.Context) error
 	opentelemetryEndpoint := flag.Lookup(opentelemetryEndpointKey).Value.String()
 	if opentelemetryEndpoint != "" {
@@ -110,10 +104,17 @@ func main() {
 	r.Use(otelchi.Middleware("sample"))
 	r.Use(requestCount.RequestCount)
 
+	// create pi handler config
+	piHandlerConfig, err := pi.NewPiConfig()
+	if err != nil {
+		slog.Error("Failed to create pi handler config", "error", err)
+		return
+	}
+
 	r.Get("/", root.RootHandler)
 	r.Get("/health", health.HealthHandler)
 	r.Get("/env", env.EnvHandler)
-	r.Get("/pi/{duration}", pi.PiHandler)
+	r.Get("/pi/{duration}", piHandlerConfig.PiHandler)
 
 	go func() {
 		port := fmt.Sprintf(":%s", flag.Lookup(portKey).Value)

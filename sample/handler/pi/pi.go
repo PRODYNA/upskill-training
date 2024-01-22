@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"github.com/go-chi/chi/v5"
 	"github.com/prodyna/kuka-training/sample/telemetry"
-	"github.com/prodyna/kuka-training/sample/telemetry/metrics"
+	"go.opentelemetry.io/otel/metric"
 	"math/big"
 	"net/http"
 	"runtime"
@@ -19,7 +19,21 @@ type PiResponse struct {
 	Duration int     `json:"duration"`
 }
 
-func PiHandler(writer http.ResponseWriter, request *http.Request) {
+type PiHandlerConfig struct {
+	counter metric.Int64Counter
+}
+
+func NewPiConfig() (*PiHandlerConfig, error) {
+	counter, err := telemetry.Meter().Int64Counter("sample_pi_counter", metric.WithDescription("Pi Counter"))
+	if err != nil {
+		return nil, err
+	}
+	return &PiHandlerConfig{
+		counter: counter,
+	}, nil
+}
+
+func (config *PiHandlerConfig) PiHandler(writer http.ResponseWriter, request *http.Request) {
 	ctx, span := telemetry.Tracer().Start(request.Context(), "PiHandler")
 	defer span.End()
 
@@ -35,6 +49,7 @@ func PiHandler(writer http.ResponseWriter, request *http.Request) {
 	for i := 0; i < runtime.NumCPU(); i++ {
 		go func() {
 			defer wg.Done()
+			config.counter.Add(ctx, 1)
 			calculatePiWithDuration(ctx, duration)
 		}()
 	}
@@ -78,6 +93,4 @@ func calculatePiWithDuration(ctx context.Context, duration int) {
 		pi.Add(pi, result)
 
 	}
-
-	metrics.PiCounter.Add(ctx, 1)
 }
