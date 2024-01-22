@@ -13,6 +13,7 @@ import (
 	"github.com/prodyna/kuka-training/sample/handler/root"
 	"github.com/prodyna/kuka-training/sample/meta"
 	"github.com/prodyna/kuka-training/sample/telemetry"
+	"github.com/prodyna/kuka-training/sample/telemetry/metrics"
 	"github.com/riandyrn/otelchi"
 	"log/slog"
 	"net/http"
@@ -95,17 +96,31 @@ func main() {
 	// create chi router
 	r := chi.NewRouter()
 
+	requestCount, err := metrics.NewRequestCountHandler()
+	if err != nil {
+		slog.Error("Failed to create request count handler", "error", err)
+		return
+	}
+
 	// add otelchi middleware
 	r.Use(middleware.RequestID)
 	r.Use(middleware.RealIP)
 	r.Use(middleware.Recoverer)
 	r.Use(httplog.RequestLogger(reqlog))
 	r.Use(otelchi.Middleware("sample"))
+	r.Use(requestCount.RequestCount)
+
+	// create pi handler config
+	piHandlerConfig, err := pi.NewPiConfig()
+	if err != nil {
+		slog.Error("Failed to create pi handler config", "error", err)
+		return
+	}
 
 	r.Get("/", root.RootHandler)
 	r.Get("/health", health.HealthHandler)
 	r.Get("/env", env.EnvHandler)
-	r.Get("/pi/{duration}", pi.PiHandler)
+	r.Get("/pi/{duration}", piHandlerConfig.PiHandler)
 
 	go func() {
 		port := fmt.Sprintf(":%s", flag.Lookup(portKey).Value)
