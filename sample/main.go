@@ -45,6 +45,11 @@ func main() {
 
 	jsonLog := flag.Lookup(logformatKey).Value.String() == "json"
 
+	var handler slog.Handler
+	handler = slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{
+		AddSource: true,
+	})
+	handler = telemetry.SlogTraceHandler{handler}
 	reqlog := httplog.NewLogger(meta.Name, httplog.Options{
 		JSON:             jsonLog,
 		LogLevel:         slog.LevelDebug,
@@ -52,6 +57,7 @@ func main() {
 		RequestHeaders:   true,
 		MessageFieldName: "message",
 		TimeFieldFormat:  time.DateTime,
+
 		Tags: map[string]string{
 			"app":     meta.Name,
 			"version": meta.Version,
