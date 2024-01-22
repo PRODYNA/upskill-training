@@ -14,6 +14,7 @@ import (
 	"github.com/prodyna/kuka-training/sample/meta"
 	"github.com/prodyna/kuka-training/sample/telemetry"
 	"github.com/prodyna/kuka-training/sample/telemetry/metrics"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/riandyrn/otelchi"
 	"log/slog"
 	"net/http"
@@ -121,6 +122,9 @@ func main() {
 	r.Get("/health", health.HealthHandler)
 	r.Get("/env", env.EnvHandler)
 	r.Get("/pi/{duration}", piHandlerConfig.PiHandler)
+
+	r.Handle("/favicon.ico", http.NotFoundHandler())
+	r.Handle("/metrics", promhttp.Handler())
 
 	go func() {
 		port := fmt.Sprintf(":%s", flag.Lookup(portKey).Value)
