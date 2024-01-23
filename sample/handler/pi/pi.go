@@ -6,6 +6,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/prodyna/kuka-training/sample/telemetry"
 	"go.opentelemetry.io/otel/metric"
+	"log/slog"
 	"math/big"
 	"net/http"
 	"runtime"
@@ -41,6 +42,7 @@ func (config *PiHandlerConfig) PiHandler(writer http.ResponseWriter, request *ht
 	duration, err := strconv.Atoi(durationStr)
 	if err != nil || duration <= 0 {
 		span.RecordError(err)
+		slog.Error("Invalid value for 'duration'", slog.String("duration", durationStr))
 		http.Error(writer, "Invalid value for 'duration'", http.StatusBadRequest)
 		return
 	}
