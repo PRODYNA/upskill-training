@@ -6,6 +6,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/prodyna/kuka-training/sample/telemetry"
 	"go.opentelemetry.io/otel/metric"
+	"log/slog"
 	"math/big"
 	"net/http"
 	"runtime"
@@ -40,6 +41,8 @@ func (config *PiHandlerConfig) PiHandler(writer http.ResponseWriter, request *ht
 	durationStr := chi.URLParam(request, "duration")
 	duration, err := strconv.Atoi(durationStr)
 	if err != nil || duration <= 0 {
+		span.RecordError(err)
+		slog.Error("Invalid value for 'duration'", slog.String("duration", durationStr))
 		http.Error(writer, "Invalid value for 'duration'", http.StatusBadRequest)
 		return
 	}
@@ -52,8 +55,10 @@ func (config *PiHandlerConfig) PiHandler(writer http.ResponseWriter, request *ht
 			config.counter.Add(ctx, 1)
 			calculatePiWithDuration(ctx, duration)
 		}()
+		span.AddEvent("Pi calculation started")
 	}
 	wg.Wait()
+	span.AddEvent("Pi calculation finished")
 
 	response := &PiResponse{
 		CpuCores: float64(runtime.NumCPU()),
@@ -62,6 +67,7 @@ func (config *PiHandlerConfig) PiHandler(writer http.ResponseWriter, request *ht
 
 	resonseJson, err := json.Marshal(response)
 	if err != nil {
+		span.RecordError(err)
 		http.Error(writer, "Error while marshalling response", http.StatusInternalServerError)
 		return
 	}

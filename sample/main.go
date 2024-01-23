@@ -6,22 +6,23 @@ import (
 	"fmt"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
-	"github.com/go-chi/httplog/v2"
 	"github.com/prodyna/kuka-training/sample/handler/env"
 	"github.com/prodyna/kuka-training/sample/handler/health"
 	"github.com/prodyna/kuka-training/sample/handler/pi"
 	"github.com/prodyna/kuka-training/sample/handler/root"
+	"github.com/prodyna/kuka-training/sample/logging"
 	"github.com/prodyna/kuka-training/sample/meta"
 	"github.com/prodyna/kuka-training/sample/telemetry"
 	"github.com/prodyna/kuka-training/sample/telemetry/metrics"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/riandyrn/otelchi"
+	"github.com/samber/slog-chi"
 	"log/slog"
 	"net/http"
 	"os"
 	"os/signal"
 	"strconv"
 	"syscall"
-	"time"
 )
 
 const (
@@ -44,26 +45,10 @@ func main() {
 		return
 	}
 
-	jsonLog := flag.Lookup(logformatKey).Value.String() == "json"
-
-	reqlog := httplog.NewLogger(meta.Name, httplog.Options{
-		JSON:             jsonLog,
-		LogLevel:         slog.LevelDebug,
-		Concise:          true,
-		RequestHeaders:   true,
-		MessageFieldName: "message",
-		TimeFieldFormat:  time.DateTime,
-		Tags: map[string]string{
-			"app":     meta.Name,
-			"version": meta.Version,
-		},
-		QuietDownRoutes: []string{
-			"/",
-			"/health",
-		},
-		QuietDownPeriod: 10 * time.Second,
-		// SourceFieldName: "source",
-	})
+	json := flag.Lookup(logformatKey).Value.String() == "json"
+	logging.LoggerConfig{
+		JSON: json,
+	}.ConfigureDefaultLogger()
 
 	slog.Info("Configuration",
 		portKey, flag.Lookup(portKey).Value,
@@ -99,9 +84,12 @@ func main() {
 	// add otelchi middleware
 	r.Use(middleware.RequestID)
 	r.Use(middleware.RealIP)
+	r.Use(otelchi.Middleware(meta.Name))
+	r.Use(slogchi.NewWithConfig(slog.Default(), slogchi.Config{
+		WithSpanID:  true,
+		WithTraceID: true,
+	}))
 	r.Use(middleware.Recoverer)
-	r.Use(httplog.RequestLogger(reqlog))
-	r.Use(otelchi.Middleware("sample"))
 	r.Use(requestCount.RequestCount)
 
 	// create pi handler config
@@ -115,6 +103,9 @@ func main() {
 	r.Get("/health", health.HealthHandler)
 	r.Get("/env", env.EnvHandler)
 	r.Get("/pi/{duration}", piHandlerConfig.PiHandler)
+
+	r.Handle("/favicon.ico", http.NotFoundHandler())
+	r.Handle("/metrics", promhttp.Handler())
 
 	go func() {
 		port := fmt.Sprintf(":%s", flag.Lookup(portKey).Value)

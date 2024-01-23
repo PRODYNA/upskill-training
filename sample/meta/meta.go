@@ -4,4 +4,4 @@ package meta
 var Name = "sample"
 
 // The version of the application
-var Version = "undefined"
+var Version = "0.0.0"
