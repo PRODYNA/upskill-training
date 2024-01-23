@@ -5,8 +5,10 @@ go 1.21.6
 require (
 	github.com/go-chi/chi/v5 v5.0.11
 	github.com/go-chi/httplog/v2 v2.0.9
+	github.com/lmittmann/tint v1.0.4
 	github.com/prometheus/client_golang v1.18.0
 	github.com/riandyrn/otelchi v0.5.1
+	github.com/samber/slog-chi v1.9.0
 	go.opentelemetry.io/otel v1.22.0
 	go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetricgrpc v0.45.0
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace v1.22.0
