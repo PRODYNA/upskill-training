@@ -1,4 +1,4 @@
-FROM golang:1.21-alpine
+FROM golang:1.21-alpine AS build
 
 WORKDIR /build
 COPY . .
@@ -8,7 +8,7 @@ RUN go build -o sample
 
 FROM alpine
 
-COPY --from=0 /build/sample /
+COPY --from=build /build/sample /
 
 ENV LOGFORMAT=json
 
