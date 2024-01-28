@@ -36,11 +36,11 @@ resource "azurerm_kubernetes_cluster" "main" {
     pod_cidr       = "172.17.0.0/16"
     service_cidr   = "172.18.0.0/16"
 
-    load_balancer_profile {
-      outbound_ip_address_ids = [
-        azurerm_public_ip.ingress.id
-      ]
-    }
+#    load_balancer_profile {
+#      outbound_ip_address_ids = [
+#        azurerm_public_ip.ingress.id
+#      ]
+#    }
   }
 
   # Azure AD authentication with Azure RBAC
@@ -69,43 +69,43 @@ resource "azurerm_kubernetes_cluster" "main" {
 ######################
 
 # for nginx to be able to get the ip
-resource "azurerm_role_assignment" "aks_rg_nw_contr" {
-  principal_id         = azurerm_kubernetes_cluster.main.identity[0].principal_id
-  scope                = data.azurerm_resource_group.main.id
-  role_definition_name = "Network Contributor"
-}
+#resource "azurerm_role_assignment" "aks_rg_nw_contr" {
+#  principal_id         = azurerm_kubernetes_cluster.main.identity[0].principal_id
+#  scope                = data.azurerm_resource_group.main.id
+#  role_definition_name = "Network Contributor"
+#}
 
 # assign cluster admin role to me
-resource "azurerm_role_assignment" "aks_cluster_admin_to_sp" {
-  principal_id         = data.azurerm_client_config.current.object_id
-  scope                = azurerm_kubernetes_cluster.main.id
-  role_definition_name = "Azure Kubernetes Service RBAC Cluster Admin"
-}
+#resource "azurerm_role_assignment" "aks_cluster_admin_to_sp" {
+#  principal_id         = data.azurerm_client_config.current.object_id
+#  scope                = azurerm_kubernetes_cluster.main.id
+#  role_definition_name = "Azure Kubernetes Service RBAC Cluster Admin"
+#}
 
 # allow cluster to pull images from acr
-resource "azurerm_role_assignment" "aks_acr_pull" {
-  principal_id         = azurerm_kubernetes_cluster.main.kubelet_identity[0].object_id
-  scope                = azurerm_container_registry.main.id
-  role_definition_name = "AcrPull"
-}
+#resource "azurerm_role_assignment" "aks_acr_pull" {
+#  principal_id         = azurerm_kubernetes_cluster.main.kubelet_identity[0].object_id
+#  scope                = azurerm_container_registry.main.id
+#  role_definition_name = "AcrPull"
+#}
 
 // wait two minutes
-resource "null_resource" "wait" {
-  provisioner "local-exec" {
-    command = "sleep 120"
-  }
-  depends_on = [
-    azurerm_role_assignment.aks_cluster_admin_to_sp,
-    azurerm_role_assignment.aks_acr_pull,
-    azurerm_role_assignment.aks_rg_nw_contr
-  ]
-}
+#resource "null_resource" "wait" {
+#  provisioner "local-exec" {
+#    command = "sleep 120"
+#  }
+#  depends_on = [
+#    azurerm_role_assignment.aks_cluster_admin_to_sp,
+#    // azurerm_role_assignment.aks_acr_pull,
+#    azurerm_role_assignment.aks_rg_nw_contr
+#  ]
+#}
 
-resource "null_resource" "get-credentials" {
-  provisioner "local-exec" {
-    command="az aks get-credentials -g ${data.azurerm_resource_group.main.name} -n ${azurerm_kubernetes_cluster.main.name} --overwrite-existing"
-  }
-  depends_on = [
-    null_resource.wait
-  ]
-}
+#resource "null_resource" "get-credentials" {
+#  provisioner "local-exec" {
+#    command="az aks get-credentials -g ${data.azurerm_resource_group.main.name} -n ${azurerm_kubernetes_cluster.main.name} --overwrite-existing"
+#  }
+#  depends_on = [
+#    null_resource.wait
+#  ]
+#}
