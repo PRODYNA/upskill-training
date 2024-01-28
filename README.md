@@ -1,2 +1,7 @@
-# kuka-training
-Training material for the KUKA
+# KUKA Training
+
+## Sample application
+
+* [Sample](sample/) application
+* [Terraform](terraform/) for creating the infrastructure
+* 
