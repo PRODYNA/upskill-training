@@ -76,11 +76,11 @@ resource "azurerm_kubernetes_cluster" "main" {
 #}
 
 # assign cluster admin role to me
-#resource "azurerm_role_assignment" "aks_cluster_admin_to_sp" {
-#  principal_id         = data.azurerm_client_config.current.object_id
-#  scope                = azurerm_kubernetes_cluster.main.id
-#  role_definition_name = "Azure Kubernetes Service RBAC Cluster Admin"
-#}
+resource "azurerm_role_assignment" "aks_cluster_admin_to_sp" {
+  principal_id         = data.azurerm_client_config.current.object_id
+  scope                = azurerm_kubernetes_cluster.main.id
+  role_definition_name = "Azure Kubernetes Service RBAC Cluster Admin"
+}
 
 # allow cluster to pull images from acr
 #resource "azurerm_role_assignment" "aks_acr_pull" {
@@ -90,22 +90,22 @@ resource "azurerm_kubernetes_cluster" "main" {
 #}
 
 // wait two minutes
-#resource "null_resource" "wait" {
-#  provisioner "local-exec" {
-#    command = "sleep 120"
-#  }
-#  depends_on = [
-#    azurerm_role_assignment.aks_cluster_admin_to_sp,
-#    // azurerm_role_assignment.aks_acr_pull,
-#    azurerm_role_assignment.aks_rg_nw_contr
-#  ]
-#}
+resource "null_resource" "wait" {
+  provisioner "local-exec" {
+    command = "sleep 120"
+  }
+  depends_on = [
+    azurerm_role_assignment.aks_cluster_admin_to_sp,
+    // azurerm_role_assignment.aks_acr_pull,
+    // azurerm_role_assignment.aks_rg_nw_contr
+  ]
+}
 
-#resource "null_resource" "get-credentials" {
-#  provisioner "local-exec" {
-#    command="az aks get-credentials -g ${data.azurerm_resource_group.main.name} -n ${azurerm_kubernetes_cluster.main.name} --overwrite-existing"
-#  }
-#  depends_on = [
-#    null_resource.wait
-#  ]
-#}
+resource "null_resource" "get-credentials" {
+  provisioner "local-exec" {
+    command="az aks get-credentials -g ${data.azurerm_resource_group.main.name} -n ${azurerm_kubernetes_cluster.main.name} --overwrite-existing"
+  }
+  depends_on = [
+    null_resource.wait
+  ]
+}
