@@ -9,11 +9,8 @@
 #}
 #
 ## Build container image insize of ACR
-#resource "null_resource" "build_sample" {
-#  provisioner "local-exec" {
-#    command = "az acr build -r ${azurerm_container_registry.main.name} -t ${local.image.repository}:${local.image.tag} ../../sample"
-#  }
-#  depends_on = [
-#    null_resource.waitcr
-#  ]
-#}
+resource "null_resource" "build_sample" {
+  provisioner "local-exec" {
+    command = "az acr build -r ${azurerm_container_registry.main.name} -t ${local.image.repository}:${local.image.tag} ../../sample"
+  }
+}

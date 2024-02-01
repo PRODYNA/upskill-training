@@ -83,11 +83,11 @@ resource "azurerm_role_assignment" "aks_cluster_admin_to_sp" {
 }
 
 # allow cluster to pull images from acr
-#resource "azurerm_role_assignment" "aks_acr_pull" {
-#  principal_id         = azurerm_kubernetes_cluster.main.kubelet_identity[0].object_id
-#  scope                = azurerm_container_registry.main.id
-#  role_definition_name = "AcrPull"
-#}
+resource "azurerm_role_assignment" "aks_acr_pull" {
+  principal_id         = azurerm_kubernetes_cluster.main.kubelet_identity[0].object_id
+  scope                = azurerm_container_registry.main.id
+  role_definition_name = "AcrPull"
+}
 
 resource "null_resource" "get-credentials" {
   provisioner "local-exec" {
