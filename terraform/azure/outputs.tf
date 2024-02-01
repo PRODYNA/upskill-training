@@ -1,6 +1,6 @@
-#output "ingress_ip" {
-#  value = azurerm_public_ip.ingress.ip_address
-#}
+output "ingress_ip" {
+  value = azurerm_public_ip.ingress.ip_address
+}
 
 output "resource_group_name" {
   value = data.azurerm_resource_group.main.name

@@ -69,11 +69,11 @@ resource "azurerm_kubernetes_cluster" "main" {
 ######################
 
 # for nginx to be able to get the ip
-#resource "azurerm_role_assignment" "aks_rg_nw_contr" {
-#  principal_id         = azurerm_kubernetes_cluster.main.identity[0].principal_id
-#  scope                = data.azurerm_resource_group.main.id
-#  role_definition_name = "Network Contributor"
-#}
+resource "azurerm_role_assignment" "aks_rg_nw_contr" {
+  principal_id         = azurerm_kubernetes_cluster.main.identity[0].principal_id
+  scope                = data.azurerm_resource_group.main.id
+  role_definition_name = "Network Contributor"
+}
 
 # assign cluster admin role to me
 resource "azurerm_role_assignment" "aks_cluster_admin_to_sp" {
