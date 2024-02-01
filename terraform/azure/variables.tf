@@ -5,7 +5,6 @@ variable "environment" {
 
 variable "project_name" {
   type    = string
-  default = "project"
 }
 
 variable "cloudflare_zone_id" {
