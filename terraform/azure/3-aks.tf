@@ -89,23 +89,8 @@ resource "azurerm_role_assignment" "aks_cluster_admin_to_sp" {
 #  role_definition_name = "AcrPull"
 #}
 
-// wait two minutes
-resource "null_resource" "wait" {
-  provisioner "local-exec" {
-    command = "sleep 120"
-  }
-  depends_on = [
-    azurerm_role_assignment.aks_cluster_admin_to_sp,
-    // azurerm_role_assignment.aks_acr_pull,
-    // azurerm_role_assignment.aks_rg_nw_contr
-  ]
-}
-
 resource "null_resource" "get-credentials" {
   provisioner "local-exec" {
     command="az aks get-credentials -g ${data.azurerm_resource_group.main.name} -n ${azurerm_kubernetes_cluster.main.name} --overwrite-existing"
   }
-  depends_on = [
-    null_resource.wait
-  ]
 }
