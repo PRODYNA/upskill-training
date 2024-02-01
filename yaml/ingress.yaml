@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: sample
+spec:
+  rules:
+    # Enter your own name <project_name>.prodyna.wtf
+    - host: "dkrizic.prodyna.wtf"
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: sample
+                port:
+                  number: 80
