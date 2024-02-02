@@ -30,6 +30,7 @@ const (
 	verboseKey               = "verbose"
 	opentelemetryEndpointKey = "telemetry-endpoint"
 	logformatKey             = "logformat"
+	staticDirKey             = "static-dir"
 )
 
 func main() {
@@ -37,6 +38,7 @@ func main() {
 	flag.Int(verboseKey, LookupEnvOrInt("VERBOSE", 0), "verbosity level (VERBOSE)")
 	flag.String(opentelemetryEndpointKey, LookupEnvOrString("OPENTELEMETRY_ENDPOINT", ""), "OpenTelemetry endpoint (OPENTELEMETRY_ENDPOINT)")
 	flag.String("logformat", LookupEnvOrString("LOGFORMAT", "text"), "log format either json or text (LOGFORMAT)")
+	flag.String(staticDirKey, LookupEnvOrString("STATICDIR", "static"), "static directory (STATIC_DIR)")
 	flag.Bool("help", false, "show help")
 	flag.Parse()
 
@@ -53,7 +55,9 @@ func main() {
 	slog.Info("Configuration",
 		portKey, flag.Lookup(portKey).Value,
 		verboseKey, flag.Lookup(verboseKey).Value,
-		opentelemetryEndpointKey, flag.Lookup(opentelemetryEndpointKey).Value)
+		opentelemetryEndpointKey, flag.Lookup(opentelemetryEndpointKey).Value,
+		logformatKey, flag.Lookup(logformatKey).Value,
+		staticDirKey, flag.Lookup(staticDirKey).Value)
 
 	var shutdown func(ctx context.Context) error
 	opentelemetryEndpoint := flag.Lookup(opentelemetryEndpointKey).Value.String()
@@ -104,6 +108,11 @@ func main() {
 	r.Get("/env", env.EnvHandler)
 	r.Get("/pi/{duration}", piHandlerConfig.PiHandler)
 
+	// some handlers
+	staticDir := flag.Lookup(staticDirKey).Value.String()
+	fs := http.FileServer(http.Dir(staticDir))
+	slog.Info("Serving static files from", "static-dir", staticDir)
+	r.Handle("/static/*", http.StripPrefix("/static/", fs))
 	r.Handle("/favicon.ico", http.NotFoundHandler())
 	r.Handle("/metrics", promhttp.Handler())
 

@@ -11,6 +11,9 @@ FROM alpine
 COPY --from=build /build/sample /
 
 ENV LOGFORMAT=json
+ENV STATICDIR=/static
+
+COPY static /static
 
 EXPOSE 8000
 

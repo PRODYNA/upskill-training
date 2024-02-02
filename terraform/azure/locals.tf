@@ -8,6 +8,6 @@ locals {
   resource_prefix = "${local.tags.project}-${local.loc_short}-${local.tags.env}"
   image = {
     repository = "sample"
-    tag        = "1.0"
+    tag        = "1.1"
   }
 }
