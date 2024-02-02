@@ -116,6 +116,11 @@ func main() {
 	r.Handle("/favicon.ico", http.NotFoundHandler())
 	r.Handle("/metrics", promhttp.Handler())
 
+	chi.Walk(r, func(method string, route string, handler http.Handler, middlewares ...func(http.Handler) http.Handler) error {
+		slog.Info("Route", "method", method, "route", route, "middlewares", len(middlewares))
+		return nil
+	})
+
 	go func() {
 		port := fmt.Sprintf(":%s", flag.Lookup(portKey).Value)
 		slog.Info("Starting server", "port", port)
