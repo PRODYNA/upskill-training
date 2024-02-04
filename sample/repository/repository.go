@@ -5,7 +5,7 @@ import (
 	"log/slog"
 )
 
-const countKey = "sample-count"
+const prefix = "sample"
 
 type Config struct {
 	Enabled  bool

@@ -124,6 +124,9 @@ func main() {
 	}))
 	r.Use(middleware.Recoverer)
 	r.Use(requestCount.RequestCount)
+	slog.Info("Request count middleware added")
+	r.Use(redisConfig.RequestCount)
+	slog.Info("Redis request count middleware added")
 
 	// create pi handler config
 	piHandlerConfig, err := pi.NewPiConfig()
