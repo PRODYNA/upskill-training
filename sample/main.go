@@ -12,6 +12,7 @@ import (
 	"github.com/prodyna/kuka-training/sample/handler/root"
 	"github.com/prodyna/kuka-training/sample/logging"
 	"github.com/prodyna/kuka-training/sample/meta"
+	"github.com/prodyna/kuka-training/sample/repository"
 	"github.com/prodyna/kuka-training/sample/telemetry"
 	"github.com/prodyna/kuka-training/sample/telemetry/metrics"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
@@ -31,6 +32,8 @@ const (
 	opentelemetryEndpointKey = "telemetry-endpoint"
 	logformatKey             = "logformat"
 	staticDirKey             = "static-dir"
+	redisEnabledKey          = "redis-enabled"
+	redisEndpointKey         = "redis-endpoint"
 )
 
 func main() {
@@ -39,6 +42,8 @@ func main() {
 	flag.String(opentelemetryEndpointKey, LookupEnvOrString("OPENTELEMETRY_ENDPOINT", ""), "OpenTelemetry endpoint (OPENTELEMETRY_ENDPOINT)")
 	flag.String("logformat", LookupEnvOrString("LOGFORMAT", "text"), "log format either json or text (LOGFORMAT)")
 	flag.String(staticDirKey, LookupEnvOrString("STATICDIR", "static"), "static directory (STATIC_DIR)")
+	flag.Bool(redisEnabledKey, LookupEnvOrString("REDIS_ENABLED", "false") == "true", "enable repository (REDIS_ENABLED)")
+	flag.String(redisEndpointKey, LookupEnvOrString("REDIS_ENDPOINT", "localhost:6379"), "repository endpoint (REDIS_ENDPOINT)")
 	flag.Bool("help", false, "show help")
 	flag.Parse()
 
@@ -57,7 +62,9 @@ func main() {
 		verboseKey, flag.Lookup(verboseKey).Value,
 		opentelemetryEndpointKey, flag.Lookup(opentelemetryEndpointKey).Value,
 		logformatKey, flag.Lookup(logformatKey).Value,
-		staticDirKey, flag.Lookup(staticDirKey).Value)
+		staticDirKey, flag.Lookup(staticDirKey).Value,
+		redisEnabledKey, flag.Lookup(redisEnabledKey).Value,
+		redisEndpointKey, flag.Lookup(redisEndpointKey).Value)
 
 	var shutdown func(ctx context.Context) error
 	opentelemetryEndpoint := flag.Lookup(opentelemetryEndpointKey).Value.String()
@@ -71,6 +78,28 @@ func main() {
 		shutdown = sd
 	} else {
 		slog.Info("OpenTelemetry disabled")
+	}
+
+	redisEnabled, err := strconv.ParseBool(flag.Lookup(redisEnabledKey).Value.String())
+	if err != nil {
+		slog.Error("Failed to parse repository enabled", "error", err)
+		return
+	}
+	redisEndpoint := flag.Lookup(redisEndpointKey).Value.String()
+	redisConfig := repository.Config{
+		Enabled:  redisEnabled,
+		Endpoint: redisEndpoint,
+	}
+	if redisConfig.Enabled {
+		slog.Info("Redis enabled", "endpoint", redisEndpoint)
+		err = redisConfig.Connect()
+		if err != nil {
+			slog.Error("Failed to connect to redis", "error", err)
+			return
+		}
+		slog.Info("Connected to redis", "endpoint", redisEndpoint)
+	} else {
+		slog.Info("Redis disabled")
 	}
 
 	done := make(chan os.Signal, 1)
@@ -136,6 +165,13 @@ func main() {
 		err := shutdown(context.Background())
 		if err != nil {
 			slog.Error("Failed to shutdown OpenTelemetry", "error", err)
+		}
+	}
+	if redisConfig.Enabled {
+		slog.Info("Disconnecting from redis")
+		err := redisConfig.Disconnect()
+		if err != nil {
+			slog.Error("Failed to close connection to redis redis", "error", err)
 		}
 	}
 
