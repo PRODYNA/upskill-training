@@ -21,7 +21,7 @@ spec:
       containers:
       - name: sample
         # Please replace with your own image form the ACR
-        image: dkrizicweudevacrmain.azurecr.io/sample:1.0
+        image: dkrizicweudevacrmain.azurecr.io/sample:1.1
         env:
           - name: LOGFORMAT
             value: text
