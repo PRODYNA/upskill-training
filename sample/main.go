@@ -92,7 +92,7 @@ func main() {
 	}
 	if redisConfig.Enabled {
 		slog.Info("Redis enabled", "endpoint", redisEndpoint)
-		err = redisConfig.Connect()
+		err = redisConfig.Connect(context.Background())
 		if err != nil {
 			slog.Error("Failed to connect to redis", "error", err)
 			return
@@ -172,7 +172,7 @@ func main() {
 	}
 	if redisConfig.Enabled {
 		slog.Info("Disconnecting from redis")
-		err := redisConfig.Disconnect()
+		err := redisConfig.Disconnect(context.Background())
 		if err != nil {
 			slog.Error("Failed to close connection to redis redis", "error", err)
 		}

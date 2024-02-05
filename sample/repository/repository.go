@@ -1,7 +1,9 @@
 package repository
 
 import (
-	"github.com/go-redis/redis/v8"
+	"context"
+	"github.com/redis/go-redis/extra/redisotel/v9"
+	"github.com/redis/go-redis/v9"
 	"log/slog"
 )
 
@@ -13,20 +15,26 @@ type Config struct {
 	client   *redis.Client
 }
 
-func (c *Config) Connect() (err error) {
+func (c *Config) Connect(ctx context.Context) (err error) {
 	if c.Enabled {
 		c.client = redis.NewClient(&redis.Options{
 			Addr: c.Endpoint,
 			DB:   0,
 		})
-		if _, err = c.client.Ping(c.client.Context()).Result(); err != nil {
+		if _, err = c.client.Ping(ctx).Result(); err != nil {
+			return err
+		}
+		if err = redisotel.InstrumentTracing(c.client); err != nil {
+			return err
+		}
+		if err = redisotel.InstrumentMetrics(c.client); err != nil {
 			return err
 		}
 	}
 	return nil
 }
 
-func (c *Config) Disconnect() (err error) {
+func (c *Config) Disconnect(ctx context.Context) (err error) {
 	if c.Enabled {
 		err = c.client.Close()
 		if err != nil {

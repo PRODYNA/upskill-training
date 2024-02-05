@@ -5,9 +5,10 @@ go 1.21.6
 require (
 	github.com/go-chi/chi/v5 v5.0.11
 	github.com/go-chi/httplog/v2 v2.0.9
-	github.com/go-redis/redis/v8 v8.11.5
 	github.com/lmittmann/tint v1.0.4
 	github.com/prometheus/client_golang v1.18.0
+	github.com/redis/go-redis/extra/redisotel/v9 v9.0.5
+	github.com/redis/go-redis/v9 v9.4.0
 	github.com/riandyrn/otelchi v0.5.1
 	github.com/samber/slog-chi v1.9.0
 	go.opentelemetry.io/otel v1.22.0
@@ -35,6 +36,7 @@ require (
 	github.com/prometheus/client_model v0.5.0 // indirect
 	github.com/prometheus/common v0.46.0 // indirect
 	github.com/prometheus/procfs v0.12.0 // indirect
+	github.com/redis/go-redis/extra/rediscmd/v9 v9.0.5 // indirect
 	go.opentelemetry.io/contrib v1.22.0 // indirect
 	go.opentelemetry.io/proto/otlp v1.1.0 // indirect
 	golang.org/x/net v0.20.0 // indirect
