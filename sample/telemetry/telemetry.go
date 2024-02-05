@@ -5,22 +5,20 @@ import (
 	"errors"
 	"fmt"
 	"github.com/prodyna/kuka-training/sample/meta"
-	"go.opentelemetry.io/otel/exporters/otlp/otlptrace"
-	"go.opentelemetry.io/otel/exporters/prometheus"
-	metric2 "go.opentelemetry.io/otel/metric"
-	trace2 "go.opentelemetry.io/otel/trace"
-	"google.golang.org/grpc/credentials/insecure"
-	"testing"
-
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetricgrpc"
+	"go.opentelemetry.io/otel/exporters/otlp/otlptrace"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc"
+	"go.opentelemetry.io/otel/exporters/prometheus"
+	metric2 "go.opentelemetry.io/otel/metric"
 	"go.opentelemetry.io/otel/propagation"
 	"go.opentelemetry.io/otel/sdk/metric"
 	"go.opentelemetry.io/otel/sdk/resource"
 	"go.opentelemetry.io/otel/sdk/trace"
 	semconv "go.opentelemetry.io/otel/semconv/v1.21.0"
+	trace2 "go.opentelemetry.io/otel/trace"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 	"time"
 )
 
@@ -177,35 +175,4 @@ func Tracer() trace2.Tracer {
 // Provide a metrics
 func Meter() metric2.Meter {
 	return otel.Meter(meta.Name)
-}
-
-// Function to sort a given array of string reverse alphabetically
-func ReverseAlphabeticalSort(a []string) {
-	for i := 0; i < len(a)/2; i++ {
-		j := len(a) - i - 1
-		a[i], a[j] = a[j], a[i]
-	}
-}
-
-// Filter a given array of string by a given filter function
-func Filter(a []string, f func(string) bool) []string {
-	var filtered []string
-	for _, s := range a {
-		if f(s) {
-			filtered = append(filtered, s)
-		}
-	}
-	return filtered
-}
-
-// Test the filter function
-func TestFilter(t *testing.T) {
-	a := []string{"a", "b", "c", "d", "e", "f"}
-	f := func(s string) bool {
-		return s != "c"
-	}
-	filtered := Filter(a, f)
-	if len(filtered) != 5 {
-		t.Errorf("Expected 5 elements, got %d", len(filtered))
-	}
 }

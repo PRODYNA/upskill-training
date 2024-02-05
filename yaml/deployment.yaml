@@ -25,6 +25,12 @@ spec:
         env:
           - name: LOGFORMAT
             value: text
+          - name: OPENTELEMETRY_ENDPOINT
+            value: "opentelemetry-collector.observability:4317"
+          - name: REDIS_ENABLED
+            value: "true"
+          - name: REDIS_ENDPOINT
+            value: "redis-master.redis:6379"
         ports:
         - containerPort: 8000
         readinessProbe:
