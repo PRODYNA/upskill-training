@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sampleconfig
+data:
+  COLOR: red
+  LOGFORMAT: text

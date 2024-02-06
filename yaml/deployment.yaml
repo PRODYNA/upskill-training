@@ -22,9 +22,9 @@ spec:
       - name: sample
         # Please replace with your own image form the ACR
         image: dkrizicweudevacrmain.azurecr.io/sample:1.1
-        env:
-          - name: LOGFORMAT
-            value: text
+        envFrom:
+          - configMapRef:
+              name: sampleconfig
         ports:
         - containerPort: 8000
         readinessProbe:
