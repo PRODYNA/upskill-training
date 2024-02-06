@@ -116,14 +116,6 @@ func newResource(serviceName string, serviceVersion string) (*resource.Resource,
 		semconv.ServiceName(serviceName),
 		semconv.ServiceVersion(serviceVersion),
 	), nil
-	//return resource.Merge(
-	// resource.Default(),
-	// resource.NewWithAttributes(
-	// semconv.SchemaURL,
-	// semconv.ServiceName(serviceName),
-	// semconv.ServiceVersion(serviceVersion)) //
-	//),
-	//)
 }
 
 func newPropagator() propagation.TextMapPropagator {

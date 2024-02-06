@@ -117,10 +117,15 @@ func main() {
 	// add otelchi middleware
 	r.Use(middleware.RequestID)
 	r.Use(middleware.RealIP)
-	r.Use(otelchi.Middleware(meta.Name))
+	r.Use(otelchi.Middleware(meta.Name, otelchi.WithFilter(func(r *http.Request) bool {
+		return r.URL.Path != "/health"
+	})))
 	r.Use(slogchi.NewWithConfig(slog.Default(), slogchi.Config{
 		WithSpanID:  true,
 		WithTraceID: true,
+		Filters: []slogchi.Filter{
+			slogchi.IgnorePath("/health"),
+		},
 	}))
 	r.Use(middleware.Recoverer)
 	r.Use(requestCount.RequestCount)
