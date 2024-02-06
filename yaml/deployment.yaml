@@ -43,7 +43,12 @@ spec:
           - name: static
             mountPath: /static
             readOnly: true
+          - name: data
+            mountPath: /data
       volumes:
         - name: static
           configMap:
             name: samplestatic
+        - name: data
+          persistentVolumeClaim:
+            claimName: sampledata
