@@ -4,11 +4,13 @@ metadata:
   name: sample
   annotations:
     darko: is-cool
+    # This tell cert-manager to use the ClusterIssuer named letsencrypt-sample
     cert-manager.io/cluster-issuer: letsencrypt-sample
 spec:
   ingressClassName: nginx
   tls:
     - hosts:
+        # This name must match the name of the ingress host
         - dkrizic.prodyna.wtf
       secretName: sample-tls
   rules:
