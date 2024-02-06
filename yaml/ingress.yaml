@@ -2,8 +2,15 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: sample
+  annotations:
+    darko: is-cool
+    cert-manager.io/cluster-issuer: letsencrypt-sample
 spec:
   ingressClassName: nginx
+  tls:
+    - hosts:
+        - dkrizic.prodyna.wtf
+      secretName: sample-tls
   rules:
     # Enter your own name <project_name>.prodyna.wtf
     - host: "dkrizic.prodyna.wtf"
