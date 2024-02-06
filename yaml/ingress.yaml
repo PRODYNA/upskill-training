@@ -3,6 +3,7 @@ kind: Ingress
 metadata:
   name: sample
 spec:
+  ingressClassName: nginx
   rules:
     # Enter your own name <project_name>.prodyna.wtf
     - host: "dkrizic.prodyna.wtf"
