@@ -25,12 +25,8 @@ spec:
         envFrom:
           - configMapRef:
               name: sampleconfig
-        env:
-          - name: DATABASE_HOSTNAME
-            valueFrom:
-              secretKeyRef:
-                name: sampledb
-                key: DATABASE_HOSTNAME
+          - secretRef:
+              name: sampledb
         ports:
         - containerPort: 8000
         readinessProbe:
