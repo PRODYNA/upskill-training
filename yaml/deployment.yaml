@@ -18,17 +18,28 @@ spec:
       - name: sample
         # Please replace with your own image form the ACR
         image: dkrizicweudevacrmain.azurecr.io/sample:1.1
+        imagePullPolicy: IfNotPresent
         envFrom:
           - configMapRef:
               name: sampleconfig
           - secretRef:
               name: sampledb
+        env:
+          - name: REDIS_ENABLED
+            value: "true"
+          - name: REDIS_ENDPOINT
+            value: "redis-master.redis:6379"
         ports:
         - containerPort: 8000
+          name: web
+        - containerPort: 8001
+          name: metrics
+        - containerPort: 8002
+          name: health
         readinessProbe:
           httpGet:
             path: /health
-            port: 8000
+            port: web
           # needs to return http status code 200 .. <=399
           initialDelaySeconds: 3
           periodSeconds: 3
@@ -57,3 +68,18 @@ spec:
         - name: shared
           persistentVolumeClaim:
             claimName: sampleshared
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sample # http://sample.default
+spec:
+  ports:
+    - port: 80
+      name: http
+      protocol: TCP
+      targetPort: web
+  selector:
+    app: sample
+  sessionAffinity: None
+  type: ClusterIP
