@@ -10,9 +10,11 @@ resource "helm_release" "ingress_nginx" {
   chart            = "ingress-nginx"
   name             = "ingress-nginx"
   namespace        = kubernetes_namespace.ingress-nginx.metadata[0].name
-  version          = "v4.9.0"
+  version          = "v4.9.1"
   force_update     = true
   create_namespace = false
+
+  # helm -n ingress-nginx upgrade --install ingress-nginx ingress-nginx/ingress-nginx --version 4.9.1 -f assets/ingress-nginx/helm-values.yaml --set a=1 --set a=2
 
   set {
     name  = "controller.service.annotations.\"service\\.beta\\.kubernetes\\.io/azure-load-balancer-health-probe-request-path\""
