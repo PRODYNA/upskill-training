@@ -6,15 +6,15 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "3.87.0"
+      version = "3.98.0"
     }
     kubernetes = {
       source = "hashicorp/kubernetes"
-      version = "2.25.2"
+      version = "2.27.0"
     }
     helm = {
       source = "hashicorp/helm"
-      version = "2.12.1"
+      version = "2.13.0"
     }
   }
 }
@@ -25,7 +25,7 @@ terraform {
 
 provider "azurerm" {
   features {}
-  subscription_id = "cd4b198a-f112-461a-a3c3-d3d33c059e5c"
+  subscription_id = "5383c002-d638-4986-a0e9-74decda8b3f4"
 }
 
 # setting up the connection to the AKS cluster
