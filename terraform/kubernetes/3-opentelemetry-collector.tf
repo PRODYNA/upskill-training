@@ -26,7 +26,7 @@ resource "helm_release" "opentelemetry-collector" {
   chart            = "opentelemetry-collector"
   name             = "opentelemetry-collector"
   namespace        = kubernetes_namespace.observability.metadata[0].name
-  version          = "0.78.1"
+  version          = "0.86.1"
   create_namespace = false
   force_update     = true
 

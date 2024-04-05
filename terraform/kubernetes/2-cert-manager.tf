@@ -10,7 +10,7 @@ resource "helm_release" "cert_manager" {
   chart            = "cert-manager"
   name             = "cert-manager"
   namespace        = kubernetes_namespace.cert-manager.metadata[0].name
-  version          = "1.13.3"
+  version          = "1.14.4"
   create_namespace = false
   force_update     = true
   set {
