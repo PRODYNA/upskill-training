@@ -3,10 +3,10 @@ output "ingress_ip" {
 }
 
 output "resource_group_name" {
-  value = data.azurerm_resource_group.main.name
+  value = azurerm_resource_group.main.name
 }
 
-output "appi_instrumentation_key" {
+output "app_instrumentation_key" {
   value = azurerm_application_insights.monitoring.instrumentation_key
   sensitive = true
 }

@@ -14,7 +14,7 @@ resource "kubernetes_secret" "azuremonitorr" {
     namespace = kubernetes_namespace.observability.metadata[0].name
   }
   data = {
-    "AZURE_MONITOR_INSTRUMENTATION_KEY" = data.terraform_remote_state.azure.outputs.appi_instrumentation_key
+    "AZURE_MONITOR_INSTRUMENTATION_KEY" = data.terraform_remote_state.azure.outputs.app_instrumentation_key
   }
   type = "Opaque"
 }
