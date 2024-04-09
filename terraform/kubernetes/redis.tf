@@ -1,16 +1,16 @@
 resource "kubernetes_namespace" "redis" {
   metadata {
-      name = "redis"
+    name = "redis"
   }
 }
 
 resource "helm_release" "redis" {
-  name = "redis"
+  name       = "redis"
   repository = "https://charts.bitnami.com/bitnami"
-  chart = "redis"
-  namespace = kubernetes_namespace.redis.metadata.0.name
+  chart      = "redis"
+  namespace  = kubernetes_namespace.redis.metadata.0.name
   set {
-    name = "auth.enabled"
+    name  = "auth.enabled"
     value = "false"
   }
 }

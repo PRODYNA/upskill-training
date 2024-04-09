@@ -4,7 +4,7 @@ ingress:
   enabled: true
   className: "nginx"
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-sample
+    cert-manager.io/cluster-issuer: letsencrypt
   tls:
   - hosts:
     - example.com

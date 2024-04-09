@@ -9,11 +9,11 @@ terraform {
       version = "3.98.0"
     }
     kubernetes = {
-      source = "hashicorp/kubernetes"
+      source  = "hashicorp/kubernetes"
       version = "2.27.0"
     }
     helm = {
-      source = "hashicorp/helm"
+      source  = "hashicorp/helm"
       version = "2.13.0"
     }
   }
@@ -30,10 +30,10 @@ provider "azurerm" {
 
 # setting up the connection to the AKS cluster
 provider "kubernetes" {
-    host                   = data.azurerm_kubernetes_cluster.aks.kube_admin_config[0].host
-    client_certificate     = base64decode(data.azurerm_kubernetes_cluster.aks.kube_admin_config[0].client_certificate)
-    client_key             = base64decode(data.azurerm_kubernetes_cluster.aks.kube_admin_config[0].client_key)
-    cluster_ca_certificate = base64decode(data.azurerm_kubernetes_cluster.aks.kube_admin_config[0].cluster_ca_certificate)
+  host                   = data.azurerm_kubernetes_cluster.aks.kube_admin_config[0].host
+  client_certificate     = base64decode(data.azurerm_kubernetes_cluster.aks.kube_admin_config[0].client_certificate)
+  client_key             = base64decode(data.azurerm_kubernetes_cluster.aks.kube_admin_config[0].client_key)
+  cluster_ca_certificate = base64decode(data.azurerm_kubernetes_cluster.aks.kube_admin_config[0].cluster_ca_certificate)
 }
 
 provider "helm" {

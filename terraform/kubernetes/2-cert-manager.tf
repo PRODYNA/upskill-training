@@ -18,3 +18,15 @@ resource "helm_release" "cert_manager" {
     value = "true"
   }
 }
+
+resource "helm_release" "clusterissuer" {
+  repository       = "https://snowplow-devops.github.io/helm-charts"
+  chart            = "cert-manager-issuer"
+  version          = "0.1.0"
+  name             = "letsencrypt"
+  namespace        = kubernetes_namespace.cert-manager.metadata[0].name
+  create_namespace = false
+  values = [
+    file("assets/cert-manager-issuer/helm-values.yaml")
+  ]
+}
