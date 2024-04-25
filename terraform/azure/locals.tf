@@ -1,6 +1,6 @@
 locals {
-  location  = "westeurope"
-  loc_short = "weu"
+  location  = "germanywestcentral"
+  loc_short = "gwc"
   tags = {
     env     = var.environment
     project = var.project_name
