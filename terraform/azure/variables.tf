@@ -43,8 +43,8 @@ variable "aks" {
     }
 
     version = {
-      control_plane = "1.29.2"
-      node_pool     = "1.29.2"
+      control_plane = "1.29.0"
+      node_pool     = "1.29.0"
     }
   }
 }
