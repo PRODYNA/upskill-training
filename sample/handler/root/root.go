@@ -2,7 +2,7 @@ package root
 
 import (
 	_ "embed"
-	"github.com/prodyna/kuka-training/sample/telemetry"
+	"github.com/prodyna/upskill-training/sample/telemetry"
 	"net/http"
 )
 

@@ -2,7 +2,7 @@ package health
 
 import (
 	"encoding/json"
-	"github.com/prodyna/kuka-training/sample/meta"
+	"github.com/prodyna/upskill-training/sample/meta"
 	"net/http"
 )
 

@@ -1,7 +1,7 @@
 package metrics
 
 import (
-	"github.com/prodyna/kuka-training/sample/telemetry"
+	"github.com/prodyna/upskill-training/sample/telemetry"
 	"go.opentelemetry.io/otel/metric"
 	"net/http"
 )

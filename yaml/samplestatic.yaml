@@ -4,7 +4,7 @@ metadata:
   name: samplestatic
 data:
   index.html: |
-    <h1>This is my special KUKA version</h1>
+    <h1>This is my special PRODYNA version</h1>
 
     This HTML page has multiple lines.
     This HTML page has multiple lines.

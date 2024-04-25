@@ -3,7 +3,7 @@ package env
 import (
 	"context"
 	"encoding/json"
-	"github.com/prodyna/kuka-training/sample/telemetry"
+	"github.com/prodyna/upskill-training/sample/telemetry"
 	"net/http"
 	"os"
 	"strings"

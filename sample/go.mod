@@ -1,4 +1,4 @@
-module github.com/prodyna/kuka-training/sample
+module github.com/prodyna/upskill-training/sample
 
 go 1.22.2
 

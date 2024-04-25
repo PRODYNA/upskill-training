@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"github.com/go-chi/chi/v5"
-	"github.com/prodyna/kuka-training/sample/telemetry"
+	"github.com/prodyna/upskill-training/sample/telemetry"
 	"go.opentelemetry.io/otel/metric"
 	"log/slog"
 	"math/big"
