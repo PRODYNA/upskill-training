@@ -89,7 +89,7 @@
 #   role_definition_name = "AcrPull"
 # }
 #
-# resource "null_resource" "get-credentials" {
+# resource "terraform_data" "get-credentials" {
 #   provisioner "local-exec" {
 #     command="az aks get-credentials -g ${azurerm_resource_group.main.name} -n ${azurerm_kubernetes_cluster.main.name} --overwrite-existing"
 #   }
