@@ -93,4 +93,7 @@
 #   provisioner "local-exec" {
 #     command="az aks get-credentials -g ${azurerm_resource_group.main.name} -n ${azurerm_kubernetes_cluster.main.name} --overwrite-existing"
 #   }
+#  depends_on = [
+#    azurerm_role_assignment.aks_cluster_admin_to_sp
+#  ]
 # }

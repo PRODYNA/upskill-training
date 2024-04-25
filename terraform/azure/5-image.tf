@@ -13,4 +13,7 @@
 #   provisioner "local-exec" {
 #     command = "az acr build -r ${azurerm_container_registry.main.name} -t ${local.image.repository}:${local.image.tag} ../../sample -g ${azurerm_resource_group.main.name}"
 #   }
+#  depends_on = [
+#    terraform_data.waitcr
+#  ]
 # }
