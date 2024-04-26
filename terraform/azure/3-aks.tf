@@ -64,6 +64,19 @@ resource "azurerm_kubernetes_cluster" "main" {
   # }
 }
 
+resource "azurerm_kubernetes_cluster_node_pool" "user" {
+  name                  = "application"
+  kubernetes_cluster_id = azurerm_kubernetes_cluster.main.id
+  vm_size               = var.aks.user_node_pool.vm_size
+  node_count            = 1
+  enable_auto_scaling   = true      # optional
+  min_count             = var.aks.user_node_pool.min_count
+  max_count             = var.aks.user_node_pool.max_count
+  mode                  = "User"    # optional
+  orchestrator_version = var.aks.version.node_pool
+  os_disk_type          = "Managed" # optional
+}
+
 ######################
 ## ROLE ASSIGNMENTS ##
 ######################
