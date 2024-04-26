@@ -17,7 +17,7 @@ spec:
       containers:
       - name: sample
         # Please replace with your own image form the ACR
-        image: dkrizicweudevacrmain.azurecr.io/sample:1.1
+        image: dkrizicgwcdevacrmain.azurecr.io/sample:1.1
         imagePullPolicy: IfNotPresent
         envFrom:
           - configMapRef:
@@ -26,7 +26,7 @@ spec:
               name: sampledb
         env:
           - name: REDIS_ENABLED
-            value: "true"
+            value: "false"
           - name: REDIS_ENDPOINT
             value: "redis-master.redis:6379"
         ports:
@@ -50,24 +50,24 @@ spec:
           requests:
             cpu: 100m
             memory: 128Mi
-        volumeMounts:
-          - name: static
-            mountPath: /static
-            readOnly: true
+#        volumeMounts:
+#          - name: static
+#            mountPath: /static
+#            readOnly: true
 #          - name: data
 #            mountPath: /data
-          - name: shared
-            mountPath: /shared
-      volumes:
-        - name: static
-          configMap:
-            name: samplestatic
+#          - name: shared
+#            mountPath: /shared
+#      volumes:
+#        - name: static
+#          configMap:
+#            name: samplestatic
 #        - name: data
 #          persistentVolumeClaim:
 #            claimName: sampledata
-        - name: shared
-          persistentVolumeClaim:
-            claimName: sampleshared
+#        - name: shared
+#          persistentVolumeClaim:
+#            claimName: sampleshared
 ---
 apiVersion: v1
 kind: Service
