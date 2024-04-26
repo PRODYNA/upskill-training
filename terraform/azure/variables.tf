@@ -30,6 +30,11 @@ variable "aks" {
       min_count = number
       max_count = number
     })
+    user_node_pool = object({
+      vm_size   = string
+      min_count = number
+      max_count = number
+    })
     version = object({
       control_plane = string
       node_pool     = string
@@ -38,6 +43,12 @@ variable "aks" {
   default = {
     default_node_pool = {
       vm_size   = "Standard_B2ms"
+      min_count = 1
+      max_count = 2
+    }
+
+    user_node_pool = {
+      vm_size   = "Standard_B2s_v2"
       min_count = 1
       max_count = 1
     }

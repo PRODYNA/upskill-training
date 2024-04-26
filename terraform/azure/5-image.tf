@@ -1,5 +1,4 @@
 ## Wait two minutes after creation of container registry
-# resource "null_resource" "waitcr" {
 resource "terraform_data" "waitcr" {
   provisioner "local-exec" {
     command = "sleep 120"
