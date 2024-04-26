@@ -1,6 +1,6 @@
 locals {
-  location  = "westeurope"
-  loc_short = "weu"
+  location  = "germanywestcentral"
+  loc_short = "gwc"
   tags = {
     env     = data.terraform_remote_state.azure.outputs.environment
     project = data.terraform_remote_state.azure.outputs.project_name
