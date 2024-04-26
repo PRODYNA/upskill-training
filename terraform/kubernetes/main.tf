@@ -25,7 +25,7 @@ terraform {
 
 provider "azurerm" {
   features {}
-  subscription_id = "5383c002-d638-4986-a0e9-74decda8b3f4"
+  subscription_id = data.terraform_remote_state.azure.outputs.subscription_id
 }
 
 # setting up the connection to the AKS cluster
@@ -72,3 +72,4 @@ data "azurerm_public_ip" "ingress" {
   name                = "${local.resource_prefix}-pip-ingress"
   resource_group_name = data.azurerm_resource_group.main.name
 }
+
