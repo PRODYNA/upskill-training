@@ -12,6 +12,10 @@ terraform {
       source = "cloudflare/cloudflare"
       version = "4.29.0"
     }
+    time = {
+      source = "hashicorp/time"
+      version = "0.11.1"
+    }
   }
 }
 
@@ -28,6 +32,8 @@ provider "azurerm" {
 provider "cloudflare" {
   api_token = var.cloudflare_api_token
 }
+
+provider "time" {}
 
 ##################
 ## DATA SOURCES ##
