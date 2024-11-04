@@ -6,15 +6,15 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "3.98.0"
+      version = "4.8.0"
     }
     kubernetes = {
       source  = "hashicorp/kubernetes"
-      version = "2.27.0"
+      version = "2.33.0"
     }
     helm = {
       source  = "hashicorp/helm"
-      version = "2.13.0"
+      version = "2.16.1"
     }
   }
 }
@@ -30,18 +30,18 @@ provider "azurerm" {
 
 # setting up the connection to the AKS cluster
 provider "kubernetes" {
-  host                   = data.azurerm_kubernetes_cluster.aks.kube_admin_config[0].host
-  client_certificate     = base64decode(data.azurerm_kubernetes_cluster.aks.kube_admin_config[0].client_certificate)
-  client_key             = base64decode(data.azurerm_kubernetes_cluster.aks.kube_admin_config[0].client_key)
-  cluster_ca_certificate = base64decode(data.azurerm_kubernetes_cluster.aks.kube_admin_config[0].cluster_ca_certificate)
+  host                   = data.azurerm_kubernetes_cluster.main.kube_admin_config[0].host
+  client_certificate     = base64decode(data.azurerm_kubernetes_cluster.main.kube_admin_config[0].client_certificate)
+  client_key             = base64decode(data.azurerm_kubernetes_cluster.main.kube_admin_config[0].client_key)
+  cluster_ca_certificate = base64decode(data.azurerm_kubernetes_cluster.main.kube_admin_config[0].cluster_ca_certificate)
 }
 
 provider "helm" {
   kubernetes {
-    host                   = data.azurerm_kubernetes_cluster.aks.kube_admin_config[0].host
-    client_certificate     = base64decode(data.azurerm_kubernetes_cluster.aks.kube_admin_config[0].client_certificate)
-    client_key             = base64decode(data.azurerm_kubernetes_cluster.aks.kube_admin_config[0].client_key)
-    cluster_ca_certificate = base64decode(data.azurerm_kubernetes_cluster.aks.kube_admin_config[0].cluster_ca_certificate)
+    host                   = data.azurerm_kubernetes_cluster.main.kube_admin_config[0].host
+    client_certificate     = base64decode(data.azurerm_kubernetes_cluster.main.kube_admin_config[0].client_certificate)
+    client_key             = base64decode(data.azurerm_kubernetes_cluster.main.kube_admin_config[0].client_key)
+    cluster_ca_certificate = base64decode(data.azurerm_kubernetes_cluster.main.kube_admin_config[0].cluster_ca_certificate)
   }
 }
 
@@ -63,13 +63,22 @@ data "azurerm_resource_group" "main" {
   name = data.terraform_remote_state.azure.outputs.resource_group_name
 }
 
-data "azurerm_kubernetes_cluster" "aks" {
-  name                = "${local.resource_prefix}-aks-main"
-  resource_group_name = data.azurerm_resource_group.main.name
+data "azurerm_kubernetes_cluster" "main" {
+  name                = data.terraform_remote_state.azure.outputs.kubernetes_cluster.name
+  resource_group_name = data.terraform_remote_state.azure.outputs.resource_group_name
 }
 
 data "azurerm_public_ip" "ingress" {
-  name                = "${local.resource_prefix}-pip-ingress"
-  resource_group_name = data.azurerm_resource_group.main.name
+  name                = data.terraform_remote_state.azure.outputs.ingress_ip_name
+  resource_group_name = data.terraform_remote_state.azure.outputs.resource_group_name
 }
 
+data "azurerm_log_analytics_workspace" "log_analytics_workspace" {
+  name                = data.terraform_remote_state.azure.outputs.log_analytics_workspace.name
+  resource_group_name = data.terraform_remote_state.azure.outputs.resource_group_name
+}
+
+data "azurerm_application_insights" "application_insights" {
+  name                = data.terraform_remote_state.azure.outputs.application_insights.name
+  resource_group_name = data.terraform_remote_state.azure.outputs.resource_group_name
+}
