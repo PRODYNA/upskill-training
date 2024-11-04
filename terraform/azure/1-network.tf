@@ -19,3 +19,36 @@ resource "azurerm_public_ip" "ingress" {
     ]
   }
 }
+
+
+resource "azurerm_virtual_network" "azurecilium" {
+  name                = "${local.resource_prefix}-vnet"
+  address_space       = ["10.0.0.0/8"]
+  location            = azurerm_resource_group.main.location
+  resource_group_name = azurerm_resource_group.main.name
+}
+
+resource "azurerm_subnet" "azureciliumnodes" {
+  name                 = "azurecilium-subnet-nodes"
+  resource_group_name  = azurerm_resource_group.main.name
+  virtual_network_name = azurerm_virtual_network.azurecilium.name
+  address_prefixes     = ["10.240.0.0/16"]
+
+}
+
+resource "azurerm_subnet" "azureciliumpods" {
+  name                 = "azurecilium-subnet-pods"
+  resource_group_name  = azurerm_resource_group.main.name
+  virtual_network_name = azurerm_virtual_network.azurecilium.name
+  address_prefixes     = ["10.241.0.0/16"]
+  delegation {
+    name = "aks-delegation"
+
+    service_delegation {
+      actions = [
+        "Microsoft.Network/virtualNetworks/subnets/join/action",
+      ]
+      name = "Microsoft.ContainerService/managedClusters"
+    }
+  }
+}

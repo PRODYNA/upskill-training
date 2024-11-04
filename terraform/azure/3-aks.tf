@@ -13,6 +13,7 @@ resource "azurerm_kubernetes_cluster" "main" {
   role_based_access_control_enabled = true
   local_account_disabled            = false
 
+
   # default node pool is always of Mode "System"
   default_node_pool {
     name                = "system"
@@ -22,7 +23,8 @@ resource "azurerm_kubernetes_cluster" "main" {
     auto_scaling_enabled = true
     min_count           = var.aks.default_node_pool.min_count
     max_count           = var.aks.default_node_pool.max_count
-    # vnet_subnet_id       = azurerm_subnet.k8s.id
+    vnet_subnet_id       = azurerm_subnet.azureciliumnodes.id
+    pod_subnet_id        = azurerm_subnet.azureciliumpods.id
     orchestrator_version = var.aks.version.node_pool
     upgrade_settings {
       max_surge = "10%"
@@ -30,10 +32,11 @@ resource "azurerm_kubernetes_cluster" "main" {
   }
 
   network_profile {
-    network_plugin = "kubenet"
-    network_policy = "calico"
+    network_plugin = "azure"
+    network_policy = "cilium"
+    network_data_plane = "cilium"
     dns_service_ip = "172.18.0.10"
-    pod_cidr       = "172.17.0.0/16"
+    // pod_cidr       = "172.17.0.0/16"
     service_cidr   = "172.18.0.0/16"
 
 #    load_balancer_profile {
@@ -64,6 +67,7 @@ resource "azurerm_kubernetes_cluster" "main" {
   # }
 }
 
+/*
 resource "azurerm_kubernetes_cluster_node_pool" "user" {
   name                  = "application"
   kubernetes_cluster_id = azurerm_kubernetes_cluster.main.id
@@ -76,6 +80,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "user" {
   orchestrator_version = var.aks.version.node_pool
   os_disk_type          = "Managed" # optional
 }
+*/
 
 ######################
 ## ROLE ASSIGNMENTS ##
