@@ -14,10 +14,14 @@ updates:
     schedule:
       interval: "weekly"
   - package-ecosystem: "gomod" # See documentation for possible values
-    directory: "/" # Location of package manifests
+    directory: "/sample" # Location of package manifests
     schedule:
       interval: "weekly"
   - package-ecosystem: "terraform" # See documentation for possible values
-    directory: "/" # Location of package manifests
+    directory: "/terraform/azure" # Location of package manifests
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "terraform" # See documentation for possible values
+    directory: "/terraform/kubernetes" # Location of package manifests
     schedule:
       interval: "weekly"
