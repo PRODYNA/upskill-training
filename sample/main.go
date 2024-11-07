@@ -149,9 +149,9 @@ func main() {
 	staticDir := flag.Lookup(staticDirKey).Value.String()
 	fs := http.FileServer(http.Dir(staticDir))
 	slog.Info("Serving static files from", "static-dir", staticDir)
-	r.Handle("/static/*", http.StripPrefix("/static/", fs))
-	r.Handle("/favicon.ico", http.NotFoundHandler())
-	r.Handle("/metrics", promhttp.Handler())
+	r.Method(http.MethodGet, "/static/*", http.StripPrefix("/static/", fs))
+	r.Method(http.MethodGet, "/favicon.ico", http.NotFoundHandler())
+	r.Method(http.MethodGet, "/metrics", promhttp.Handler())
 
 	chi.Walk(r, func(method string, route string, handler http.Handler, middlewares ...func(http.Handler) http.Handler) error {
 		slog.Info("Route", "method", method, "route", route, "middlewares", len(middlewares))
