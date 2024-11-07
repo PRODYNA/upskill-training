@@ -6,7 +6,7 @@ resource "azurerm_public_ip" "ingress" {
   allocation_method    = "Static"
   name                 = "${local.resource_prefix}-ip-ingress"
   sku                  = "Standard"
-  location             = local.location
+  location             = var.location
   resource_group_name  = azurerm_resource_group.main.name
   tags                 = local.tags
   zones                = [1, 2, 3]
@@ -20,12 +20,12 @@ resource "azurerm_public_ip" "ingress" {
   }
 }
 
-
 resource "azurerm_virtual_network" "azurecilium" {
   name                = "${local.resource_prefix}-vnet"
   address_space       = ["10.0.0.0/8"]
   location            = azurerm_resource_group.main.location
   resource_group_name = azurerm_resource_group.main.name
+  tags                = local.tags
 }
 
 resource "azurerm_subnet" "azureciliumnodes" {
@@ -33,7 +33,6 @@ resource "azurerm_subnet" "azureciliumnodes" {
   resource_group_name  = azurerm_resource_group.main.name
   virtual_network_name = azurerm_virtual_network.azurecilium.name
   address_prefixes     = ["10.240.0.0/16"]
-
 }
 
 resource "azurerm_subnet" "azureciliumpods" {

@@ -3,7 +3,7 @@
 ########################
 
 resource "azurerm_kubernetes_cluster" "main" {
-  location                          = local.location
+  location                          = azurerm_resource_group.main.location
   name                              = "${local.resource_prefix}-aks"
   resource_group_name               = azurerm_resource_group.main.name
   node_resource_group               = "${local.resource_prefix}-aks-resources"
@@ -16,13 +16,13 @@ resource "azurerm_kubernetes_cluster" "main" {
 
   # default node pool is always of Mode "System"
   default_node_pool {
-    name                = "system"
-    vm_size             = var.aks.default_node_pool.vm_size
-    os_disk_type        = "Managed"
-    type                = "VirtualMachineScaleSets"
+    name                 = "system"
+    vm_size              = var.aks.default_node_pool.vm_size
+    os_disk_type         = "Managed"
+    type                 = "VirtualMachineScaleSets"
     auto_scaling_enabled = true
-    min_count           = var.aks.default_node_pool.min_count
-    max_count           = var.aks.default_node_pool.max_count
+    min_count            = var.aks.default_node_pool.min_count
+    max_count            = var.aks.default_node_pool.max_count
     vnet_subnet_id       = azurerm_subnet.azureciliumnodes.id
     pod_subnet_id        = azurerm_subnet.azureciliumpods.id
     orchestrator_version = var.aks.version.node_pool
@@ -31,25 +31,30 @@ resource "azurerm_kubernetes_cluster" "main" {
     }
   }
 
-  network_profile {
-    network_plugin = "azure"
-    network_policy = "cilium"
-    network_data_plane = "cilium"
-    dns_service_ip = "172.18.0.10"
-    // pod_cidr       = "172.17.0.0/16"
-    service_cidr   = "172.18.0.0/16"
+  service_mesh_profile {
+    mode      = "Istio"
+    revisions = ["asm-1-23"]
+  }
 
-#    load_balancer_profile {
-#      outbound_ip_address_ids = [
-#        azurerm_public_ip.ingress.id
-#      ]
-#    }
+  network_profile {
+    network_plugin     = "azure"
+    network_policy     = "cilium"
+    network_data_plane = "cilium"
+    dns_service_ip     = "172.18.0.10"
+    // pod_cidr       = "172.17.0.0/16"
+    service_cidr = "172.18.0.0/16"
+
+    #    load_balancer_profile {
+    #      outbound_ip_address_ids = [
+    #        azurerm_public_ip.ingress.id
+    #      ]
+    #    }
   }
 
   # Azure AD authentication with Azure RBAC
   azure_active_directory_role_based_access_control {
     azure_rbac_enabled = true
-    tenant_id = data.azurerm_client_config.current.tenant_id
+    tenant_id          = data.azurerm_client_config.current.tenant_id
   }
 
   identity {
@@ -109,7 +114,7 @@ resource "azurerm_role_assignment" "aks_acr_pull" {
 #
 resource "terraform_data" "get-credentials" {
   provisioner "local-exec" {
-    command="az aks get-credentials -g ${azurerm_resource_group.main.name} -n ${azurerm_kubernetes_cluster.main.name} --overwrite-existing"
+    command = "az aks get-credentials -g ${azurerm_resource_group.main.name} -n ${azurerm_kubernetes_cluster.main.name} --overwrite-existing"
   }
   depends_on = [
     azurerm_role_assignment.aks_cluster_admin_to_sp

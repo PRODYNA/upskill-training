@@ -1,8 +1,8 @@
 locals {
-  location  = "germanywestcentral"
   tags = {
-    env     = var.environment
-    project = var.project_name
+    project    = var.project_name
+    env        = var.environment
+    managed_by = "terraform"
   }
   resource_prefix = "${local.tags.project}-${local.tags.env}"
   image = {

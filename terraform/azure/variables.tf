@@ -2,13 +2,18 @@ variable "subscription_id" {
   type = string
 }
 
+variable "location" {
+  type    = string
+  default = "germanywestcentral"
+}
+
 variable "environment" {
   type    = string
   default = "dev"
 }
 
 variable "project_name" {
-  type    = string
+  type = string
 }
 
 variable "cloudflare_zone_id" {
@@ -18,7 +23,7 @@ variable "cloudflare_zone_id" {
 
 variable "cloudflare_api_token" {
   type    = string
-  default = "bxAwoD13eVTrF4oKXicCYxApw4EHUyYEvgakDcHd" # should be in a secret
+  default = "wApUkUdY6vlXcFCW_G3tKXbkgl1dYKEjh_1jaV5j" # should be in a secret
 }
 
 variable "aks" {
