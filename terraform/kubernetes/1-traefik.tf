@@ -20,11 +20,6 @@ resource "helm_release" "traefik" {
   }
 
   set {
-    name  = "service.annotations.service\\.beta\\.kubernetes\\.io/azure-load-balancer-health-probe-request-path"
-    value = "/ping"
-  }
-
-  set {
     name = "service.annotations.service\\.beta\\.kubernetes\\.io/azure-pip-name"
     value = data.azurerm_public_ip.ingress.name
   }
