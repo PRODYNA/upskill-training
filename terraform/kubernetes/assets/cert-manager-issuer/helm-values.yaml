@@ -2,4 +2,4 @@ global:
 acme:
   environment: letsencrypt
   email: "darko.krizic@prodyna.com"
-  httpSolverIngressClass: "nginx"
+  httpSolverIngressClass: "traefik"

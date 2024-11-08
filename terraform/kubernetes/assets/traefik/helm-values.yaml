@@ -1,0 +1,130 @@
+deployment:
+  replicas: null
+  revisionHistoryLimit: 3
+  annotations: {}
+  podAnnotations: {}
+ingressClass:  # @schema additionalProperties: false
+  enabled: true
+  isDefaultClass: false
+  name: "traefik"
+
+experimental:
+  kubernetesGateway:
+    enabled: true
+
+gatewayClass:  # @schema additionalProperties: false
+  enabled: true
+  name: ""
+  labels: {}
+
+ingressRoute:
+  dashboard:
+    enabled: true
+  healthcheck:
+    enabled: false
+
+providers:  # @schema additionalProperties: false
+  kubernetesCRD:
+    enabled: true
+  kubernetesIngress:
+    enabled: true
+    publishedService:
+      enabled: true
+  kubernetesGateway:
+    enabled: true
+    experimentalChannel: true
+
+logs:
+  general:
+    format: json # @schema enum:["common", "json", null]; type:[string, null]; default: "common"
+    noColor: true
+  access:
+    enabled: true
+    format: json # @schema enum:["common", "json", null]; type:[string, null]; default: "common"
+
+metrics:
+  addInternals: true
+  prometheus:
+    serviceMonitor:
+      enabled: false
+  otlp:
+    # -- Set to true in order to enable the OpenTelemetry metrics
+    enabled: false
+    grpc:
+      enabled: true
+      # -- Format: <scheme>://<host>:<port><path>. Default: http://localhost:4318/v1/metrics
+      endpoint: "opentelemetry-collector.observability:4317"
+      # -- Allows reporter to send metrics to the OpenTelemetry Collector without using a secured protocol.
+      insecure: true
+
+tracing:  # @schema additionalProperties: false
+  addInternals: false
+  otlp:
+    enabled: true
+    grpc:
+      enabled: true
+      insecure: true
+      endpoint: "opentelemetry-collector.observability:4317"
+
+# -- Global command arguments to be passed to all traefik's pods
+globalArguments: []
+
+additionalArguments: []
+env: []
+envFrom: []
+
+ports:
+  web:
+    hostPort: 32080
+    redirectTo:
+      port: websecure
+    proxyProtocol:
+      trustedIPs:
+        - "10.0.0.0/8"
+    forwardedHeaders:
+      trustedIPs:
+        - "10.0.0.0/8"
+  websecure:
+    hostPort: 32443
+    proxyProtocol:
+      trustedIPs:
+        - "10.0.0.0/8"
+    forwardedHeaders:
+      trustedIPs:
+        - "10.0.0.0/8"
+
+service:
+  single: true
+  externalTrafficPolicy: "Local"
+
+autoscaling:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 3
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 80
+
+resources:
+  requests:
+    cpu: "100m"
+    memory: "50Mi"
+  limits:
+    cpu: "300m"
+    memory: "150Mi"
+
+affinity:
+  podAntiAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      - labelSelector:
+          matchLabels:
+            app.kubernetes.io/name: '{{ template "traefik.name" . }}'
+            app.kubernetes.io/instance: '{{ .Release.Name }}-{{ .Release.Namespace }}'
+        topologyKey: kubernetes.io/hostname
+
+gateway:
+  namespacePolicy: All
