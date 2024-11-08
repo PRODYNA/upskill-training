@@ -21,7 +21,11 @@ ingressRoute:
   dashboard:
     enabled: true
   healthcheck:
-    enabled: false
+    enabled: true
+    entryPoints:
+      - traefik
+      - web
+      - websecure
 
 providers:  # @schema additionalProperties: false
   kubernetesCRD:
@@ -75,7 +79,7 @@ envFrom: []
 
 ports:
   web:
-    hostPort: 32080
+    nodePort: 30080
     redirectTo:
       port: websecure
     proxyProtocol:
@@ -85,7 +89,7 @@ ports:
       trustedIPs:
         - "10.0.0.0/8"
   websecure:
-    hostPort: 32443
+    nodePort: 30443
     proxyProtocol:
       trustedIPs:
         - "10.0.0.0/8"
@@ -97,12 +101,15 @@ service:
   single: true
   externalTrafficPolicy: "Local"
   annotations:
-    service.beta.kubernetes.io/port_80_health-probe_protocol: "http"
-    service.beta.kubernetes.io/port_80_health-probe_port: "8080"
-    service.beta.kubernetes.io/port_80_health-probe_request-path: "/ping"
-    service.beta.kubernetes.io/port_443_health-probe_protocol: "http"
-    service.beta.kubernetes.io/port_443_health-probe_port: "8080"
-    service.beta.kubernetes.io/port_443_health-probe_request-path: "/ping"
+    service.beta.kubernetes.io/azure-load-balancer-health-probe-request-path: "/"
+    #service.beta.kubernetes.io/port_80_health-probe_protocol: "http"
+    #service.beta.kubernetes.io/port_80_health-probe_port: "80"
+    # service.beta.kubernetes.io/port_80_health-probe_request-path: "/ping"
+    #service.beta.kubernetes.io/port_443_health-probe_protocol: "http"
+    #service.beta.kubernetes.io/port_443_health-probe_port: "80"
+    # service.beta.kubernetes.io/port_443_health-probe_request-path: "/ping"
+    #service.beta.kubernetes.io/port_80_no_lb_rule: "true"
+    #service.beta.kubernetes.io/port_443_no_lb_rule: "true"
 
 autoscaling:
   enabled: true
