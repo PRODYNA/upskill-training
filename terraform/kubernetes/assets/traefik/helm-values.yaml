@@ -74,9 +74,6 @@ env: []
 envFrom: []
 
 ports:
-  traefik:
-    expose:
-      default: true
   web:
     hostPort: 32080
     redirectTo:
@@ -100,7 +97,6 @@ service:
   single: true
   externalTrafficPolicy: "Local"
   annotations:
-    service.beta.kubernetes.io/azure-load-balancer-health-probe-request-path: /ping
     service.beta.kubernetes.io/port_80_health-probe_protocol: "http"
     service.beta.kubernetes.io/port_80_health-probe_port: "8080"
     service.beta.kubernetes.io/port_80_health-probe_request-path: "/ping"
