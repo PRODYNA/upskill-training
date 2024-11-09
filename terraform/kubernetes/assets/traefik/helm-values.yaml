@@ -22,10 +22,10 @@ ingressRoute:
     enabled: true
   healthcheck:
     enabled: true
-    entryPoints:
-      - traefik
-      - web
-      - websecure
+#    entryPoints:
+#      - traefik
+#      - web
+#      - websecure
 
 providers:  # @schema additionalProperties: false
   kubernetesCRD:
@@ -78,6 +78,11 @@ env: []
 envFrom: []
 
 ports:
+  traefik:
+    port: 8080
+    nodePort: 30880
+    expose:
+      default: true
   web:
     nodePort: 30080
     redirectTo:
@@ -101,15 +106,13 @@ service:
   single: true
   externalTrafficPolicy: "Local"
   annotations:
-    service.beta.kubernetes.io/azure-load-balancer-health-probe-request-path: "/"
-    #service.beta.kubernetes.io/port_80_health-probe_protocol: "http"
-    #service.beta.kubernetes.io/port_80_health-probe_port: "80"
-    # service.beta.kubernetes.io/port_80_health-probe_request-path: "/ping"
-    #service.beta.kubernetes.io/port_443_health-probe_protocol: "http"
-    #service.beta.kubernetes.io/port_443_health-probe_port: "80"
-    # service.beta.kubernetes.io/port_443_health-probe_request-path: "/ping"
-    #service.beta.kubernetes.io/port_80_no_lb_rule: "true"
-    #service.beta.kubernetes.io/port_443_no_lb_rule: "true"
+    service.beta.kubernetes.io/port_80_health-probe_protocol: "http"
+    service.beta.kubernetes.io/port_80_health-probe_port: "8080" # Must match ports.traefik.port
+    service.beta.kubernetes.io/port_80_health-probe_request-path: "/ping"
+    service.beta.kubernetes.io/port_443_health-probe_protocol: "http"
+    service.beta.kubernetes.io/port_443_health-probe_port: "8080" # Must match ports.traefik.port
+    service.beta.kubernetes.io/port_443_health-probe_request-path: "/ping"
+    service.beta.kubernetes.io/port_8080_no_lb_rule: "true" # Do not create a load balancer rule for port 8080
 
 autoscaling:
   enabled: true
