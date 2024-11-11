@@ -1,82 +1,82 @@
-resource "kubernetes_manifest" "gateway_bookinfo_gateway" {
+resource "kubernetes_manifest" "gateway_bookinfo_gateway_external" {
   manifest = {
-    "apiVersion" = "gateway.networking.k8s.io/v1"
+    "apiVersion" = "networking.istio.io/v1beta1"
     "kind" = "Gateway"
     "metadata" = {
-      "name" = "bookinfo-gateway"
-      "namespace" = kubernetes_namespace_v1.bookinfo.metadata.0.name
-
+      "name" = "bookinfo-gateway-external"
+      "namespace" = kubernetes_namespace_v1.bookinfo.metadata[0].name
     }
     "spec" = {
-      "gatewayClassName" = "istio"
-      "listeners" = [
+      "selector" = {
+        "istio" = "aks-istio-ingressgateway-external"
+      }
+      "servers" = [
         {
-          "allowedRoutes" = {
-            "namespaces" = {
-              "from" = "Same"
-            }
+          "hosts" = [
+            "*",
+          ]
+          "port" = {
+            "name" = "http"
+            "number" = 80
+            "protocol" = "HTTP"
           }
-          "name" = "http"
-          "port" = 80
-          "protocol" = "HTTP"
         },
       ]
     }
   }
 }
 
-resource "kubernetes_manifest" "httproute_bookinfo" {
+resource "kubernetes_manifest" "virtualservice_bookinfo_vs_external" {
   manifest = {
-    "apiVersion" = "gateway.networking.k8s.io/v1"
-    "kind" = "HTTPRoute"
+    "apiVersion" = "networking.istio.io/v1beta1"
+    "kind" = "VirtualService"
     "metadata" = {
-      "name" = "bookinfo"
-      "namespace" = kubernetes_namespace_v1.bookinfo.metadata.0.name
-
+      "name" = "bookinfo-vs-external"
+      "namespace" = kubernetes_namespace_v1.bookinfo.metadata[0].name
     }
     "spec" = {
-      "parentRefs" = [
-        {
-          "name" = "bookinfo-gateway"
-        },
+      "gateways" = [
+        "bookinfo-gateway-external",
       ]
-      "rules" = [
+      "hosts" = [
+        "*",
+      ]
+      "http" = [
         {
-          "backendRefs" = [
+          "match" = [
             {
-              "name" = "productpage"
-              "port" = 9080
+              "uri" = {
+                "exact" = "/productpage"
+              }
+            },
+            {
+              "uri" = {
+                "prefix" = "/static"
+              }
+            },
+            {
+              "uri" = {
+                "exact" = "/login"
+              }
+            },
+            {
+              "uri" = {
+                "exact" = "/logout"
+              }
+            },
+            {
+              "uri" = {
+                "prefix" = "/api/v1/products"
+              }
             },
           ]
-          "matches" = [
+          "route" = [
             {
-              "path" = {
-                "type" = "Exact"
-                "value" = "/productpage"
-              }
-            },
-            {
-              "path" = {
-                "type" = "PathPrefix"
-                "value" = "/static"
-              }
-            },
-            {
-              "path" = {
-                "type" = "Exact"
-                "value" = "/login"
-              }
-            },
-            {
-              "path" = {
-                "type" = "Exact"
-                "value" = "/logout"
-              }
-            },
-            {
-              "path" = {
-                "type" = "PathPrefix"
-                "value" = "/api/v1/products"
+              "destination" = {
+                "host" = "productpage"
+                "port" = {
+                  "number" = 9080
+                }
               }
             },
           ]

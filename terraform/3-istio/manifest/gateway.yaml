@@ -1,41 +1,41 @@
-apiVersion: gateway.networking.k8s.io/v1
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
-  name: bookinfo-gateway
+  name: bookinfo-gateway-external
 spec:
-  gatewayClassName: istio
-  listeners:
-    - name: http
-      port: 80
-      protocol: HTTP
-      allowedRoutes:
-        namespaces:
-          from: Same
+  selector:
+    istio: aks-istio-ingressgateway-external
+  servers:
+    - port:
+        number: 80
+        name: http
+        protocol: HTTP
+      hosts:
+        - "*"
 ---
-apiVersion: gateway.networking.k8s.io/v1
-kind: HTTPRoute
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
 metadata:
-  name: bookinfo
+  name: bookinfo-vs-external
 spec:
-  parentRefs:
-    - name: bookinfo-gateway
-  rules:
-    - matches:
-        - path:
-            type: Exact
-            value: /productpage
-        - path:
-            type: PathPrefix
-            value: /static
-        - path:
-            type: Exact
-            value: /login
-        - path:
-            type: Exact
-            value: /logout
-        - path:
-            type: PathPrefix
-            value: /api/v1/products
-      backendRefs:
-        - name: productpage
-          port: 9080
+  hosts:
+    - "*"
+  gateways:
+    - bookinfo-gateway-external
+  http:
+    - match:
+        - uri:
+            exact: /productpage
+        - uri:
+            prefix: /static
+        - uri:
+            exact: /login
+        - uri:
+            exact: /logout
+        - uri:
+            prefix: /api/v1/products
+      route:
+        - destination:
+            host: productpage
+            port:
+              number: 9080
