@@ -2,5 +2,6 @@
 
 The whole infrastcture is created using Terraform in two stages:
 
-* [Azure](azure/) for creating the Azure infrastructure
-* [Kubernetes](kubernetes/) for creating the Kubernetes infrastructure
+* [Azure](1-azure/) for creating the Azure infrastructure
+* [Kubernetes](2-kubernetes/) for creating the Kubernetes infrastructure
+* [Istio](3-istio/) for creating the Istio infrastructure
