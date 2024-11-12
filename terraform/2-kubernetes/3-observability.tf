@@ -19,6 +19,31 @@ resource "kubernetes_secret" "azuremonitorr" {
   type = "Opaque"
 }
 
+resource "helm_release" "kube-prometheus-stack" {
+  repository = "https://prometheus-community.github.io/helm-charts"
+  chart      = "kube-prometheus-stack"
+  name       = "kube-prometheus-stack"
+  namespace  = kubernetes_namespace.observability.metadata[0].name
+  version    = "66.1.1"
+  create_namespace = false
+
+  values = [
+    file("assets/kube-prometheus-stack/helm-values.yaml")
+  ]
+
+  set {
+    name  = "grafana.ingress.hosts[0]"
+    value = data.terraform_remote_state.azure.outputs.ingress_name
+  }
+
+  // set the ingress tls host
+          /*
+  set {
+    name  = "grafana.ingress.tls[0].hosts[0]"
+    value = data.terraform_remote_state.azure.outputs.ingress_name
+  }
+  */
+}
 
 # https://artifacthub.io/packages/helm/opentelemetry-helm/opentelemetry-collector
 resource "helm_release" "opentelemetry-collector" {
