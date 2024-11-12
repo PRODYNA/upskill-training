@@ -6,4 +6,7 @@ resource "kubernetes_namespace_v1" "bookinfo" {
       "istio-injection" = "enabled"
     }
   }
+  depends_on = [
+    kubernetes_namespace_v1.istio-system
+  ]
 }
