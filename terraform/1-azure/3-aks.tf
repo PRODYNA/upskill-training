@@ -31,12 +31,12 @@ resource "azurerm_kubernetes_cluster" "main" {
     }
   }
 
-  service_mesh_profile {
-    mode      = "Istio"
-    revisions = ["asm-1-23"]
-    internal_ingress_gateway_enabled = true
-    external_ingress_gateway_enabled = true
-  }
+#  service_mesh_profile {
+#    mode      = "Istio"
+#    revisions = ["asm-1-23"]
+#    internal_ingress_gateway_enabled = true
+#    external_ingress_gateway_enabled = true
+#  }
 
   network_profile {
     network_plugin     = "azure"
