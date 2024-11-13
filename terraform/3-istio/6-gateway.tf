@@ -1,10 +1,15 @@
-resource "kubernetes_manifest" "gateway_bookinfo_gateway" {
+resource "kubernetes_manifest" "gateway_bookinfo_bookinfo_gateway" {
   manifest = {
     "apiVersion" = "gateway.networking.k8s.io/v1"
     "kind" = "Gateway"
     "metadata" = {
+      "annotations" = {
+        "service.beta.kubernetes.io/azure-load-balancer-health-probe-request-path" = "/healthz/ready"
+        "service.beta.kubernetes.io/port_80_health-probe_port" = "15021"
+        "service.beta.kubernetes.io/port_80_health-probe_protocol" = "http"
+      }
       "name" = "bookinfo-gateway"
-      namespace = kubernetes_namespace_v1.bookinfo.metadata.0.name
+      "namespace" = "bookinfo"
     }
     "spec" = {
       "gatewayClassName" = "istio"
@@ -24,13 +29,13 @@ resource "kubernetes_manifest" "gateway_bookinfo_gateway" {
   }
 }
 
-resource "kubernetes_manifest" "httproute_bookinfo" {
+resource "kubernetes_manifest" "httproute_bookinfo_bookinfo" {
   manifest = {
     "apiVersion" = "gateway.networking.k8s.io/v1"
     "kind" = "HTTPRoute"
     "metadata" = {
       "name" = "bookinfo"
-      namespace = kubernetes_namespace_v1.bookinfo.metadata.0.name
+      "namespace" = "bookinfo"
     }
     "spec" = {
       "parentRefs" = [
