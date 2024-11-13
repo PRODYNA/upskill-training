@@ -8,4 +8,9 @@ resource "helm_release" "kiali" {
    values = [
        file("helm/kiali-server.yaml"),
    ]
+
+   set {
+      name = "external_services.grafana.external_url"
+      value = "https://${data.terraform_remote_state.azure.outputs.ingress_name}/grafana"
+   }
 }

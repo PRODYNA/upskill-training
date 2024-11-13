@@ -65,3 +65,32 @@ resource "helm_release" "istio-ztunnel" {
     ]
 }
 */
+
+resource "kubernetes_manifest" "servicemonitor_istio_system_istiod" {
+  manifest = {
+    "apiVersion" = "monitoring.coreos.com/v1"
+    "kind" = "ServiceMonitor"
+    "metadata" = {
+      "name" = "istiod"
+      "namespace" = "istio-system"
+    }
+    "spec" = {
+      "endpoints" = [
+        {
+          "interval" = "15s"
+          "port" = "http-monitoring"
+        },
+      ]
+      "namespaceSelector" = {
+        "matchNames" = [
+          "istio-system",
+        ]
+      }
+      "selector" = {
+        "matchLabels" = {
+          "istio" = "pilot"
+        }
+      }
+    }
+  }
+}

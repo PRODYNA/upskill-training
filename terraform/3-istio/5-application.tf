@@ -534,3 +534,27 @@ resource "kubernetes_manifest" "deployment_productpage_v1" {
     }
   }
 }
+
+resource "kubernetes_manifest" "podmonitor_bookinfo_istio_sidecars" {
+  manifest = {
+    "apiVersion" = "monitoring.coreos.com/v1"
+    "kind" = "PodMonitor"
+    "metadata" = {
+      "name" = "istio-sidecars"
+      "namespace" = "bookinfo"
+    }
+    "spec" = {
+      "podMetricsEndpoints" = [
+        {
+          "path" = "/stats/prometheus"
+          "port" = "http-envoy-prom"
+        },
+      ]
+      "selector" = {
+        "matchLabels" = {
+          "security.istio.io/tlsMode" = "istio"
+        }
+      }
+    }
+  }
+}

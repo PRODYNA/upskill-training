@@ -21,3 +21,5 @@ prometheus:
     ruleSelectorNilUsesHelmValues: false
     serviceMonitorSelectorNilUsesHelmValues: false
     serviceMonitorNamespaceSelectorNilUsesHelmValues: false
+    podMonitorSelectorNilUsesHelmValues: false
+    podMonitorNamespaceSelectorNilUsesHelmValues: false
