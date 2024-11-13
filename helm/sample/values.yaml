@@ -98,3 +98,6 @@ tolerations: []
 affinity: {}
 
 env: []
+
+serviceMonitor:
+  enabled: false
