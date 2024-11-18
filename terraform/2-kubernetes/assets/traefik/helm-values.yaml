@@ -104,7 +104,8 @@ ports:
 
 service:
   single: true
-  externalTrafficPolicy: "Local"
+  spec:
+    externalTrafficPolicy: "Local"
   annotations:
     service.beta.kubernetes.io/port_80_health-probe_protocol: "http"
     service.beta.kubernetes.io/port_80_health-probe_port: "8080" # Must match ports.traefik.port

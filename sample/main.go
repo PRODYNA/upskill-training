@@ -7,6 +7,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/prodyna/upskill-training/sample/handler/env"
+	"github.com/prodyna/upskill-training/sample/handler/headers"
 	"github.com/prodyna/upskill-training/sample/handler/health"
 	"github.com/prodyna/upskill-training/sample/handler/pi"
 	"github.com/prodyna/upskill-training/sample/handler/root"
@@ -143,6 +144,7 @@ func main() {
 	r.Get("/", root.RootHandler)
 	r.Get("/health", health.HealthHandler)
 	r.Get("/env", env.EnvHandler)
+	r.Get("/headers", headers.HeadersHandler)
 	r.Get("/pi/{duration}", piHandlerConfig.PiHandler)
 
 	// some handlers
