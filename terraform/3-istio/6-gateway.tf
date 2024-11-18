@@ -7,6 +7,8 @@ resource "kubernetes_manifest" "gateway_bookinfo_bookinfo_gateway" {
         "service.beta.kubernetes.io/azure-load-balancer-health-probe-request-path" = "/healthz/ready"
         "service.beta.kubernetes.io/port_80_health-probe_port" = "15021"
         "service.beta.kubernetes.io/port_80_health-probe_protocol" = "http"
+        "service.beta.kubernetes.io/azure-load-balancer-resource-group" = data.azurerm_resource_group.main.name
+        "service.beta.kubernetes.io/azure-pip-name" = data.azurerm_public_ip.istio_ip.name
       }
       "name" = "bookinfo-gateway"
       "namespace" = "bookinfo"
@@ -88,3 +90,65 @@ resource "kubernetes_manifest" "httproute_bookinfo_bookinfo" {
     }
   }
 }
+
+/*
+resource "kubernetes_manifest" "tlsroute_bookinfo_bookinfo" {
+  manifest = {
+    "apiVersion" = "gateway.networking.k8s.io/v1"
+    "kind" = "TLSRoute"
+    "metadata" = {
+      "name" = "bookinfo"
+      "namespace" = "bookinfo"
+    }
+    "spec" = {
+      "parentRefs" = [
+        {
+          "name" = "bookinfo-gateway"
+        },
+      ]
+      "rules" = [
+        {
+          "backendRefs" = [
+            {
+              "name" = "productpage"
+              "port" = 9080
+            },
+          ]
+          "matches" = [
+            {
+              "path" = {
+                "type" = "Exact"
+                "value" = "/productpage"
+              }
+            },
+            {
+              "path" = {
+                "type" = "PathPrefix"
+                "value" = "/static"
+              }
+            },
+            {
+              "path" = {
+                "type" = "Exact"
+                "value" = "/login"
+              }
+            },
+            {
+              "path" = {
+                "type" = "Exact"
+                "value" = "/logout"
+              }
+            },
+            {
+              "path" = {
+                "type" = "PathPrefix"
+                "value" = "/api/v1/products"
+              }
+            },
+          ]
+        },
+      ]
+    }
+  }
+}
+*/

@@ -21,13 +21,13 @@ resource "helm_release" "sample" {
   // set the ingress name
   set {
     name  = "ingress.hosts[0].host"
-    value = data.terraform_remote_state.azure.outputs.ingress_name
+    value = data.terraform_remote_state.azure.outputs.traefik_name
   }
 
   // set the ingress tls host
   set {
     name  = "ingress.tls[0].hosts[0]"
-    value = data.terraform_remote_state.azure.outputs.ingress_name
+    value = data.terraform_remote_state.azure.outputs.traefik_name
   }
 
   values = [

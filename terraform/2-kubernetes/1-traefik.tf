@@ -21,13 +21,13 @@ resource "helm_release" "traefik" {
 
   set {
     name = "service.annotations.service\\.beta\\.kubernetes\\.io/azure-pip-name"
-    value = data.azurerm_public_ip.ingress.name
+    value = data.azurerm_public_ip.traefik.name
   }
 
 
   set {
     name  = "service.loadBalancerIP"
-    value = data.azurerm_public_ip.ingress.ip_address
+    value = data.azurerm_public_ip.traefik.ip_address
   }
 
   values = [

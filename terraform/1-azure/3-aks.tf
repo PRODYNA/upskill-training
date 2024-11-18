@@ -31,7 +31,8 @@ resource "azurerm_kubernetes_cluster" "main" {
     }
   }
 
-#  service_mesh_profile {
+#  service_mesh_profile
+  #  {
 #    mode      = "Istio"
 #    revisions = ["asm-1-23"]
 #    internal_ingress_gateway_enabled = true
@@ -99,7 +100,7 @@ resource "azurerm_role_assignment" "aks_rg_nw_contr" {
   scope                = azurerm_resource_group.main.id
   role_definition_name = "Network Contributor"
 }
-#
+
 # assign cluster admin role to me
 resource "azurerm_role_assignment" "aks_cluster_admin_to_sp" {
   principal_id         = data.azurerm_client_config.current.object_id

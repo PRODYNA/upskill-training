@@ -22,12 +22,12 @@ output "container_registry" {
   sensitive = true
 }
 
-output "public_ip" {
+output "traefik_ip" {
   value = azurerm_public_ip.ingress
 }
 
-output "ingress_ip" {
-  value = azurerm_public_ip.ingress.ip_address
+output "istio_ip" {
+  value = azurerm_public_ip.istio
 }
 
 output "subscription_id" {
@@ -36,10 +36,6 @@ output "subscription_id" {
 
 output "resource_group_name" {
   value = azurerm_resource_group.main.name
-}
-
-output "ingress_ip_name" {
-  value = azurerm_public_ip.ingress.name
 }
 
 output "fq_image_name" {
@@ -58,6 +54,10 @@ output "environment" {
   value = var.environment
 }
 
-output "ingress_name" {
+output "traefik_name" {
   value = "${var.project_name}.prodyna.wtf"
+}
+
+output "istio_name" {
+  value = "${var.project_name}.istio.prodyna.wtf"
 }

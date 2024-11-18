@@ -11,6 +11,6 @@ resource "helm_release" "kiali" {
 
    set {
       name = "external_services.grafana.external_url"
-      value = "https://${data.terraform_remote_state.azure.outputs.ingress_name}/grafana"
+      value = "https://${data.terraform_remote_state.azure.outputs.traefik_name}/grafana"
    }
 }

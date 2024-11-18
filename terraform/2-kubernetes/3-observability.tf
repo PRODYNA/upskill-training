@@ -33,7 +33,7 @@ resource "helm_release" "kube-prometheus-stack" {
 
   set {
     name  = "grafana.ingress.hosts[0]"
-    value = data.terraform_remote_state.azure.outputs.ingress_name
+    value = data.terraform_remote_state.azure.outputs.traefik_name
   }
 
   // set the ingress tls host

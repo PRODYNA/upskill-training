@@ -68,8 +68,8 @@ data "azurerm_kubernetes_cluster" "main" {
   resource_group_name = data.terraform_remote_state.azure.outputs.resource_group_name
 }
 
-data "azurerm_public_ip" "ingress" {
-  name                = data.terraform_remote_state.azure.outputs.ingress_ip_name
+data "azurerm_public_ip" "istio_ip" {
+  name                = data.terraform_remote_state.azure.outputs.istio_ip.name
   resource_group_name = data.terraform_remote_state.azure.outputs.resource_group_name
 }
 
