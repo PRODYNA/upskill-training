@@ -1,0 +1,17 @@
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: letsencrypt-istio
+  namespace: bookinfo
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    privateKeySecretRef:
+      name: letsencrypt-istio
+    solvers:
+      - http01:
+          gatewayHTTPRoute:
+            parentRefs:
+              - name: bookinfo-gateway
+                namespace: bookinfo
+                kind: Gateway

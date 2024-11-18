@@ -19,7 +19,7 @@ resource "helm_release" "cert_manager" {
   ]
 }
 
-resource "helm_release" "clusterissuer" {
+resource "helm_release" "clusterissuer-traefik" {
   repository       = "https://snowplow-devops.github.io/helm-charts"
   chart            = "cert-manager-issuer"
   version          = "0.1.0"

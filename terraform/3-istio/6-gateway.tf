@@ -7,8 +7,11 @@ resource "kubernetes_manifest" "gateway_bookinfo_bookinfo_gateway" {
         "service.beta.kubernetes.io/azure-load-balancer-health-probe-request-path" = "/healthz/ready"
         "service.beta.kubernetes.io/port_80_health-probe_port" = "15021"
         "service.beta.kubernetes.io/port_80_health-probe_protocol" = "http"
+        "service.beta.kubernetes.io/port_443_health-probe_port" = "15021"
+        "service.beta.kubernetes.io/port_443_health-probe_protocol" = "http"
+        "service.beta.kubernetes.io/port_15021_no_lb_rule" = "true"
         "service.beta.kubernetes.io/azure-load-balancer-resource-group" = data.azurerm_resource_group.main.name
-
+        "cert-manager.io/issuer" = "letsencrypt-istio"
         "service.beta.kubernetes.io/azure-pip-name" = data.azurerm_public_ip.istio_ip.name
       }
       "name" = "bookinfo-gateway"
@@ -62,6 +65,9 @@ resource "kubernetes_manifest" "httproute_bookinfo_bookinfo" {
       "namespace" = "bookinfo"
     }
     "spec" = {
+      hostnames = [
+        data.terraform_remote_state.azure.outputs.istio_name
+      ]
       "parentRefs" = [
         {
           "name" = "bookinfo-gateway"
