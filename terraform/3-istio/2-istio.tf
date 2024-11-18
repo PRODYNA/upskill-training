@@ -12,8 +12,8 @@ resource "helm_release" "istio-base" {
   version    = "1.24.0"
 
   values = [
-      file("helm/istio-base.yaml"),
-    ]
+    file("helm/istio-base.yaml"),
+  ]
 }
 
 resource "helm_release" "istiod" {
@@ -69,16 +69,16 @@ resource "helm_release" "istio-ztunnel" {
 resource "kubernetes_manifest" "servicemonitor_istio_system_istiod" {
   manifest = {
     "apiVersion" = "monitoring.coreos.com/v1"
-    "kind" = "ServiceMonitor"
+    "kind"       = "ServiceMonitor"
     "metadata" = {
-      "name" = "istiod"
+      "name"      = "istiod"
       "namespace" = "istio-system"
     }
     "spec" = {
       "endpoints" = [
         {
           "interval" = "15s"
-          "port" = "http-monitoring"
+          "port"     = "http-monitoring"
         },
       ]
       "namespaceSelector" = {

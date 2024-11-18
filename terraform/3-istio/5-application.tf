@@ -1,11 +1,11 @@
 resource "kubernetes_manifest" "service_details" {
   manifest = {
     "apiVersion" = "v1"
-    "kind" = "Service"
+    "kind"       = "Service"
     "metadata" = {
       "namespace" = kubernetes_namespace_v1.bookinfo.metadata.0.name
       "labels" = {
-        "app" = "details"
+        "app"     = "details"
         "service" = "details"
       }
       "name" = "details"
@@ -27,7 +27,7 @@ resource "kubernetes_manifest" "service_details" {
 resource "kubernetes_manifest" "serviceaccount_bookinfo_details" {
   manifest = {
     "apiVersion" = "v1"
-    "kind" = "ServiceAccount"
+    "kind"       = "ServiceAccount"
     "metadata" = {
       "namespace" = kubernetes_namespace_v1.bookinfo.metadata.0.name
       "labels" = {
@@ -41,11 +41,11 @@ resource "kubernetes_manifest" "serviceaccount_bookinfo_details" {
 resource "kubernetes_manifest" "deployment_details_v1" {
   manifest = {
     "apiVersion" = "apps/v1"
-    "kind" = "Deployment"
+    "kind"       = "Deployment"
     "metadata" = {
       "namespace" = kubernetes_namespace_v1.bookinfo.metadata.0.name
       "labels" = {
-        "app" = "details"
+        "app"     = "details"
         "version" = "v1"
       }
       "name" = "details-v1"
@@ -54,23 +54,23 @@ resource "kubernetes_manifest" "deployment_details_v1" {
       "replicas" = 1
       "selector" = {
         "matchLabels" = {
-          "app" = "details"
+          "app"     = "details"
           "version" = "v1"
         }
       }
       "template" = {
         "metadata" = {
           "labels" = {
-            "app" = "details"
+            "app"     = "details"
             "version" = "v1"
           }
         }
         "spec" = {
           "containers" = [
             {
-              "image" = "docker.io/istio/examples-bookinfo-details-v1:1.20.2"
+              "image"           = "docker.io/istio/examples-bookinfo-details-v1:1.20.2"
               "imagePullPolicy" = "IfNotPresent"
-              "name" = "details"
+              "name"            = "details"
               "ports" = [
                 {
                   "containerPort" = 9080
@@ -88,11 +88,11 @@ resource "kubernetes_manifest" "deployment_details_v1" {
 resource "kubernetes_manifest" "service_ratings" {
   manifest = {
     "apiVersion" = "v1"
-    "kind" = "Service"
+    "kind"       = "Service"
     "metadata" = {
       "namespace" = kubernetes_namespace_v1.bookinfo.metadata.0.name
       "labels" = {
-        "app" = "ratings"
+        "app"     = "ratings"
         "service" = "ratings"
       }
       "name" = "ratings"
@@ -114,7 +114,7 @@ resource "kubernetes_manifest" "service_ratings" {
 resource "kubernetes_manifest" "serviceaccount_bookinfo_ratings" {
   manifest = {
     "apiVersion" = "v1"
-    "kind" = "ServiceAccount"
+    "kind"       = "ServiceAccount"
     "metadata" = {
       "namespace" = kubernetes_namespace_v1.bookinfo.metadata.0.name
       "labels" = {
@@ -128,11 +128,11 @@ resource "kubernetes_manifest" "serviceaccount_bookinfo_ratings" {
 resource "kubernetes_manifest" "deployment_ratings_v1" {
   manifest = {
     "apiVersion" = "apps/v1"
-    "kind" = "Deployment"
+    "kind"       = "Deployment"
     "metadata" = {
       "namespace" = kubernetes_namespace_v1.bookinfo.metadata.0.name
       "labels" = {
-        "app" = "ratings"
+        "app"     = "ratings"
         "version" = "v1"
       }
       "name" = "ratings-v1"
@@ -141,23 +141,23 @@ resource "kubernetes_manifest" "deployment_ratings_v1" {
       "replicas" = 1
       "selector" = {
         "matchLabels" = {
-          "app" = "ratings"
+          "app"     = "ratings"
           "version" = "v1"
         }
       }
       "template" = {
         "metadata" = {
           "labels" = {
-            "app" = "ratings"
+            "app"     = "ratings"
             "version" = "v1"
           }
         }
         "spec" = {
           "containers" = [
             {
-              "image" = "docker.io/istio/examples-bookinfo-ratings-v1:1.20.2"
+              "image"           = "docker.io/istio/examples-bookinfo-ratings-v1:1.20.2"
               "imagePullPolicy" = "IfNotPresent"
-              "name" = "ratings"
+              "name"            = "ratings"
               "ports" = [
                 {
                   "containerPort" = 9080
@@ -175,11 +175,11 @@ resource "kubernetes_manifest" "deployment_ratings_v1" {
 resource "kubernetes_manifest" "service_reviews" {
   manifest = {
     "apiVersion" = "v1"
-    "kind" = "Service"
+    "kind"       = "Service"
     "metadata" = {
       "namespace" = kubernetes_namespace_v1.bookinfo.metadata.0.name
       "labels" = {
-        "app" = "reviews"
+        "app"     = "reviews"
         "service" = "reviews"
       }
       "name" = "reviews"
@@ -201,7 +201,7 @@ resource "kubernetes_manifest" "service_reviews" {
 resource "kubernetes_manifest" "serviceaccount_bookinfo_reviews" {
   manifest = {
     "apiVersion" = "v1"
-    "kind" = "ServiceAccount"
+    "kind"       = "ServiceAccount"
     "metadata" = {
       "namespace" = kubernetes_namespace_v1.bookinfo.metadata.0.name
       "labels" = {
@@ -215,11 +215,11 @@ resource "kubernetes_manifest" "serviceaccount_bookinfo_reviews" {
 resource "kubernetes_manifest" "deployment_reviews_v1" {
   manifest = {
     "apiVersion" = "apps/v1"
-    "kind" = "Deployment"
+    "kind"       = "Deployment"
     "metadata" = {
       "namespace" = kubernetes_namespace_v1.bookinfo.metadata.0.name
       "labels" = {
-        "app" = "reviews"
+        "app"     = "reviews"
         "version" = "v1"
       }
       "name" = "reviews-v1"
@@ -228,14 +228,14 @@ resource "kubernetes_manifest" "deployment_reviews_v1" {
       "replicas" = 1
       "selector" = {
         "matchLabels" = {
-          "app" = "reviews"
+          "app"     = "reviews"
           "version" = "v1"
         }
       }
       "template" = {
         "metadata" = {
           "labels" = {
-            "app" = "reviews"
+            "app"     = "reviews"
             "version" = "v1"
           }
         }
@@ -244,13 +244,13 @@ resource "kubernetes_manifest" "deployment_reviews_v1" {
             {
               "env" = [
                 {
-                  "name" = "LOG_DIR"
+                  "name"  = "LOG_DIR"
                   "value" = "/tmp/logs"
                 },
               ]
-              "image" = "docker.io/istio/examples-bookinfo-reviews-v1:1.20.2"
+              "image"           = "docker.io/istio/examples-bookinfo-reviews-v1:1.20.2"
               "imagePullPolicy" = "IfNotPresent"
-              "name" = "reviews"
+              "name"            = "reviews"
               "ports" = [
                 {
                   "containerPort" = 9080
@@ -259,11 +259,11 @@ resource "kubernetes_manifest" "deployment_reviews_v1" {
               "volumeMounts" = [
                 {
                   "mountPath" = "/tmp"
-                  "name" = "tmp"
+                  "name"      = "tmp"
                 },
                 {
                   "mountPath" = "/opt/ibm/wlp/output"
-                  "name" = "wlp-output"
+                  "name"      = "wlp-output"
                 },
               ]
             },
@@ -272,11 +272,11 @@ resource "kubernetes_manifest" "deployment_reviews_v1" {
           "volumes" = [
             {
               "emptyDir" = {}
-              "name" = "wlp-output"
+              "name"     = "wlp-output"
             },
             {
               "emptyDir" = {}
-              "name" = "tmp"
+              "name"     = "tmp"
             },
           ]
         }
@@ -288,11 +288,11 @@ resource "kubernetes_manifest" "deployment_reviews_v1" {
 resource "kubernetes_manifest" "deployment_reviews_v2" {
   manifest = {
     "apiVersion" = "apps/v1"
-    "kind" = "Deployment"
+    "kind"       = "Deployment"
     "metadata" = {
       "namespace" = kubernetes_namespace_v1.bookinfo.metadata.0.name
       "labels" = {
-        "app" = "reviews"
+        "app"     = "reviews"
         "version" = "v2"
       }
       "name" = "reviews-v2"
@@ -301,14 +301,14 @@ resource "kubernetes_manifest" "deployment_reviews_v2" {
       "replicas" = 1
       "selector" = {
         "matchLabels" = {
-          "app" = "reviews"
+          "app"     = "reviews"
           "version" = "v2"
         }
       }
       "template" = {
         "metadata" = {
           "labels" = {
-            "app" = "reviews"
+            "app"     = "reviews"
             "version" = "v2"
           }
         }
@@ -317,13 +317,13 @@ resource "kubernetes_manifest" "deployment_reviews_v2" {
             {
               "env" = [
                 {
-                  "name" = "LOG_DIR"
+                  "name"  = "LOG_DIR"
                   "value" = "/tmp/logs"
                 },
               ]
-              "image" = "docker.io/istio/examples-bookinfo-reviews-v2:1.20.2"
+              "image"           = "docker.io/istio/examples-bookinfo-reviews-v2:1.20.2"
               "imagePullPolicy" = "IfNotPresent"
-              "name" = "reviews"
+              "name"            = "reviews"
               "ports" = [
                 {
                   "containerPort" = 9080
@@ -332,11 +332,11 @@ resource "kubernetes_manifest" "deployment_reviews_v2" {
               "volumeMounts" = [
                 {
                   "mountPath" = "/tmp"
-                  "name" = "tmp"
+                  "name"      = "tmp"
                 },
                 {
                   "mountPath" = "/opt/ibm/wlp/output"
-                  "name" = "wlp-output"
+                  "name"      = "wlp-output"
                 },
               ]
             },
@@ -345,11 +345,11 @@ resource "kubernetes_manifest" "deployment_reviews_v2" {
           "volumes" = [
             {
               "emptyDir" = {}
-              "name" = "wlp-output"
+              "name"     = "wlp-output"
             },
             {
               "emptyDir" = {}
-              "name" = "tmp"
+              "name"     = "tmp"
             },
           ]
         }
@@ -361,11 +361,11 @@ resource "kubernetes_manifest" "deployment_reviews_v2" {
 resource "kubernetes_manifest" "deployment_reviews_v3" {
   manifest = {
     "apiVersion" = "apps/v1"
-    "kind" = "Deployment"
+    "kind"       = "Deployment"
     "metadata" = {
       "namespace" = kubernetes_namespace_v1.bookinfo.metadata.0.name
       "labels" = {
-        "app" = "reviews"
+        "app"     = "reviews"
         "version" = "v3"
       }
       "name" = "reviews-v3"
@@ -374,14 +374,14 @@ resource "kubernetes_manifest" "deployment_reviews_v3" {
       "replicas" = 1
       "selector" = {
         "matchLabels" = {
-          "app" = "reviews"
+          "app"     = "reviews"
           "version" = "v3"
         }
       }
       "template" = {
         "metadata" = {
           "labels" = {
-            "app" = "reviews"
+            "app"     = "reviews"
             "version" = "v3"
           }
         }
@@ -390,13 +390,13 @@ resource "kubernetes_manifest" "deployment_reviews_v3" {
             {
               "env" = [
                 {
-                  "name" = "LOG_DIR"
+                  "name"  = "LOG_DIR"
                   "value" = "/tmp/logs"
                 },
               ]
-              "image" = "docker.io/istio/examples-bookinfo-reviews-v3:1.20.2"
+              "image"           = "docker.io/istio/examples-bookinfo-reviews-v3:1.20.2"
               "imagePullPolicy" = "IfNotPresent"
-              "name" = "reviews"
+              "name"            = "reviews"
               "ports" = [
                 {
                   "containerPort" = 9080
@@ -405,11 +405,11 @@ resource "kubernetes_manifest" "deployment_reviews_v3" {
               "volumeMounts" = [
                 {
                   "mountPath" = "/tmp"
-                  "name" = "tmp"
+                  "name"      = "tmp"
                 },
                 {
                   "mountPath" = "/opt/ibm/wlp/output"
-                  "name" = "wlp-output"
+                  "name"      = "wlp-output"
                 },
               ]
             },
@@ -418,11 +418,11 @@ resource "kubernetes_manifest" "deployment_reviews_v3" {
           "volumes" = [
             {
               "emptyDir" = {}
-              "name" = "wlp-output"
+              "name"     = "wlp-output"
             },
             {
               "emptyDir" = {}
-              "name" = "tmp"
+              "name"     = "tmp"
             },
           ]
         }
@@ -434,11 +434,11 @@ resource "kubernetes_manifest" "deployment_reviews_v3" {
 resource "kubernetes_manifest" "service_productpage" {
   manifest = {
     "apiVersion" = "v1"
-    "kind" = "Service"
+    "kind"       = "Service"
     "metadata" = {
       "namespace" = kubernetes_namespace_v1.bookinfo.metadata.0.name
       "labels" = {
-        "app" = "productpage"
+        "app"     = "productpage"
         "service" = "productpage"
       }
       "name" = "productpage"
@@ -460,7 +460,7 @@ resource "kubernetes_manifest" "service_productpage" {
 resource "kubernetes_manifest" "serviceaccount_bookinfo_productpage" {
   manifest = {
     "apiVersion" = "v1"
-    "kind" = "ServiceAccount"
+    "kind"       = "ServiceAccount"
     "metadata" = {
       "namespace" = kubernetes_namespace_v1.bookinfo.metadata.0.name
       "labels" = {
@@ -474,11 +474,11 @@ resource "kubernetes_manifest" "serviceaccount_bookinfo_productpage" {
 resource "kubernetes_manifest" "deployment_productpage_v1" {
   manifest = {
     "apiVersion" = "apps/v1"
-    "kind" = "Deployment"
+    "kind"       = "Deployment"
     "metadata" = {
       "namespace" = kubernetes_namespace_v1.bookinfo.metadata.0.name
       "labels" = {
-        "app" = "productpage"
+        "app"     = "productpage"
         "version" = "v1"
       }
       "name" = "productpage-v1"
@@ -487,28 +487,28 @@ resource "kubernetes_manifest" "deployment_productpage_v1" {
       "replicas" = 1
       "selector" = {
         "matchLabels" = {
-          "app" = "productpage"
+          "app"     = "productpage"
           "version" = "v1"
         }
       }
       "template" = {
         "metadata" = {
           "annotations" = {
-            "prometheus.io/path" = "/metrics"
-            "prometheus.io/port" = "9080"
+            "prometheus.io/path"   = "/metrics"
+            "prometheus.io/port"   = "9080"
             "prometheus.io/scrape" = "true"
           }
           "labels" = {
-            "app" = "productpage"
+            "app"     = "productpage"
             "version" = "v1"
           }
         }
         "spec" = {
           "containers" = [
             {
-              "image" = "docker.io/istio/examples-bookinfo-productpage-v1:1.20.2"
+              "image"           = "docker.io/istio/examples-bookinfo-productpage-v1:1.20.2"
               "imagePullPolicy" = "IfNotPresent"
-              "name" = "productpage"
+              "name"            = "productpage"
               "ports" = [
                 {
                   "containerPort" = 9080
@@ -517,7 +517,7 @@ resource "kubernetes_manifest" "deployment_productpage_v1" {
               "volumeMounts" = [
                 {
                   "mountPath" = "/tmp"
-                  "name" = "tmp"
+                  "name"      = "tmp"
                 },
               ]
             },
@@ -526,7 +526,7 @@ resource "kubernetes_manifest" "deployment_productpage_v1" {
           "volumes" = [
             {
               "emptyDir" = {}
-              "name" = "tmp"
+              "name"     = "tmp"
             },
           ]
         }
@@ -538,9 +538,9 @@ resource "kubernetes_manifest" "deployment_productpage_v1" {
 resource "kubernetes_manifest" "podmonitor_bookinfo_istio_sidecars" {
   manifest = {
     "apiVersion" = "monitoring.coreos.com/v1"
-    "kind" = "PodMonitor"
+    "kind"       = "PodMonitor"
     "metadata" = {
-      "name" = "istio-sidecars"
+      "name"      = "istio-sidecars"
       "namespace" = "bookinfo"
     }
     "spec" = {
