@@ -37,12 +37,10 @@ resource "helm_release" "kube-prometheus-stack" {
   }
 
   // set the ingress tls host
-          /*
   set {
     name  = "grafana.ingress.tls[0].hosts[0]"
-    value = data.terraform_remote_state.azure.outputs.ingress_name
+    value = data.terraform_remote_state.azure.outputs.traefik_name
   }
-  */
 }
 
 # https://artifacthub.io/packages/helm/opentelemetry-helm/opentelemetry-collector

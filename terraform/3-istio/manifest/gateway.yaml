@@ -16,6 +16,17 @@ spec:
       allowedRoutes:
         namespaces:
           from: Same
+    - name: https
+      port: 443
+      protocol: HTTPS
+      tls:
+        certificateRefs:
+          - kind: Secret
+            group: ""
+            name: bookinfo-tls
+      allowedRoutes:
+        namespaces:
+          from: Same
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
@@ -42,35 +53,6 @@ spec:
         - path:
             type: PathPrefix
             value: /api/v1/products
-      backendRefs:
-        - name: productpage
-          port: 9080
----
-apiVersion: gateway.networking.k8s.io/v1
-kind: TLSRoute
-metadata:
-  name: bookinfo
-  namespace: bookinfo
-spec:
-  parentRefs:
-    - name: bookinfo-gateway
-  rules:
-    - matches:
-      - path:
-          type: Exact
-          value: /productpage
-      - path:
-          type: PathPrefix
-          value: /static
-      - path:
-          type: Exact
-          value: /login
-      - path:
-          type: Exact
-          value: /logout
-      - path:
-          type: PathPrefix
-          value: /api/v1/products
       backendRefs:
         - name: productpage
           port: 9080

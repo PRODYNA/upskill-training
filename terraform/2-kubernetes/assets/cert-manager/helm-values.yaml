@@ -2,3 +2,7 @@ prometheus:
   enabled: true
   servicemonitor:
     enabled: true
+config:
+  enableGatewayAPI: true
+crds:
+  enabled: true

@@ -17,11 +17,6 @@ resource "helm_release" "cert_manager" {
   values = [
     file("assets/cert-manager/helm-values.yaml")
   ]
-
-  set {
-    name  = "installCRDs"
-    value = "true"
-  }
 }
 
 resource "helm_release" "clusterissuer" {

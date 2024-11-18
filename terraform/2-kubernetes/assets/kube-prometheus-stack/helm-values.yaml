@@ -3,7 +3,7 @@ grafana:
     enabled: true
     ingressClassName: traefik
     annotations:
-      cert-manager.io/cluster-issuer: letsencrypt
+      cert-manager.io/cluster-issuer: letsencrypt-traefik
     path: /grafana/
     pathType: Prefix
     hosts:
