@@ -20,6 +20,24 @@ resource "azurerm_public_ip" "ingress" {
   }
 }
 
+resource "azurerm_public_ip" "istio" {
+  allocation_method    = "Static"
+  name                 = "${local.resource_prefix}-ip-istio"
+  sku                  = "Standard"
+  location             = var.location
+  resource_group_name  = azurerm_resource_group.main.name
+  tags                 = local.tags
+  zones                = [1, 2, 3]
+  ddos_protection_mode = var.enable_ddos_protection == true ? "Enabled" : "Disabled"
+
+  lifecycle {
+    ignore_changes = [
+      tags["service"],
+      tags["k8s-azure-service"]
+    ]
+  }
+}
+
 resource "azurerm_virtual_network" "azurecilium" {
   name                = "${local.resource_prefix}-vnet"
   address_space       = ["10.0.0.0/8"]

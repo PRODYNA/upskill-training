@@ -13,6 +13,11 @@ resource "helm_release" "cert_manager" {
   version          = "1.14.4"
   create_namespace = false
   force_update     = true
+
+  values = [
+    file("assets/cert-manager/helm-values.yaml")
+  ]
+
   set {
     name  = "installCRDs"
     value = "true"
