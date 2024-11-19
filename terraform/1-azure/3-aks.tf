@@ -24,7 +24,7 @@ resource "azurerm_kubernetes_cluster" "main" {
     min_count            = var.aks.default_node_pool.min_count
     max_count            = var.aks.default_node_pool.max_count
     vnet_subnet_id       = azurerm_subnet.azureciliumnodes.id
-    pod_subnet_id        = azurerm_subnet.azureciliumpods.id
+    #pod_subnet_id        = azurerm_subnet.azureciliumpods.id
     orchestrator_version = var.aks.version.node_pool
     upgrade_settings {
       max_surge = "10%"
@@ -39,20 +39,20 @@ resource "azurerm_kubernetes_cluster" "main" {
 #    external_ingress_gateway_enabled = true
 #  }
 
-  network_profile {
-    network_plugin     = "azure"
-    network_policy     = "cilium"
-    network_data_plane = "cilium"
-    dns_service_ip     = "172.18.0.10"
-    // pod_cidr       = "172.17.0.0/16"
-    service_cidr = "172.18.0.0/16"
+#  network_profile {
+#    network_plugin     = "azure"
+#    network_policy     = "cilium"
+#    network_data_plane = "cilium"
+#    dns_service_ip     = "172.18.0.10"
+#    // pod_cidr       = "172.17.0.0/16"
+#    service_cidr = "172.18.0.0/16"
 
     #    load_balancer_profile {
     #      outbound_ip_address_ids = [
     #        azurerm_public_ip.ingress.id
     #      ]
     #    }
-  }
+ # }
 
   # Azure AD authentication with Azure RBAC
   azure_active_directory_role_based_access_control {
@@ -69,10 +69,13 @@ resource "azurerm_kubernetes_cluster" "main" {
     msi_auth_for_monitoring_enabled = true
   }
 
-  # key_vault_secrets_provider {
-  #   secret_rotation_enabled  = true
-  #   secret_rotation_interval = "30m"
-  # }
+  key_vault_secrets_provider {
+    secret_rotation_enabled  = true
+    secret_rotation_interval = "30m"
+  }
+
+  image_cleaner_enabled = true
+  image_cleaner_interval_hours = 96
 }
 
 /*

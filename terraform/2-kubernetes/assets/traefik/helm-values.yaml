@@ -1,4 +1,5 @@
 deployment:
+  kind: DaemonSet
   replicas: null
   revisionHistoryLimit: 3
   annotations: {}
@@ -88,19 +89,15 @@ ports:
     redirectTo:
       port: websecure
     proxyProtocol:
-      trustedIPs:
-        - "10.0.0.0/8"
+      insecure: true
     forwardedHeaders:
-      trustedIPs:
-        - "10.0.0.0/8"
+      insecure: true
   websecure:
     nodePort: 30443
     proxyProtocol:
-      trustedIPs:
-        - "10.0.0.0/8"
+      insecure: true
     forwardedHeaders:
-      trustedIPs:
-        - "10.0.0.0/8"
+      insecure: true
 
 service:
   single: true
