@@ -5,6 +5,6 @@ meshConfig:
     - name: otel-tracing
       opentelemetry:
         port: 4317
-        service: opentelemetry-collector.observability
+        service: opentelemetry-collector.observability.svc.cluster.local
         resource_detectors:
           environment: {}
