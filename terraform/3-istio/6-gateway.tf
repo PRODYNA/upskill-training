@@ -56,6 +56,7 @@ resource "kubernetes_manifest" "bookinfo_gateway" {
   }
 }
 
+/*
 resource "kubernetes_manifest" "bookinfo_http_route" {
   manifest = {
     "apiVersion" = "gateway.networking.k8s.io/v1"
@@ -90,6 +91,7 @@ resource "kubernetes_manifest" "bookinfo_http_route" {
     }
   }
 }
+ */
 
 resource "kubernetes_manifest" "bookinfo_https_route" {
   manifest = {
@@ -106,7 +108,7 @@ resource "kubernetes_manifest" "bookinfo_https_route" {
       "parentRefs" = [
         {
           "name" = "bookinfo-gateway"
-          "sectionName" = "https"
+          #"sectionName" = "https"
         },
       ]
       "rules" = [

@@ -32,7 +32,6 @@ resource "helm_release" "istiod" {
   ]
 }
 
-/*
 resource "helm_release" "istio-cni" {
     name       = "istio-cni"
     repository = local.helm.repository.istio
@@ -64,7 +63,6 @@ resource "helm_release" "istio-ztunnel" {
         helm_release.istio-cni
     ]
 }
-*/
 
 resource "kubernetes_manifest" "servicemonitor_istio_system_istiod" {
   manifest = {

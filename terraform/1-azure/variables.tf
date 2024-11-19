@@ -49,7 +49,7 @@ variable "aks" {
     default_node_pool = {
       vm_size   = "Standard_B2ms"
       min_count = 1
-      max_count = 3
+      max_count = 4
     }
 
     user_node_pool = {

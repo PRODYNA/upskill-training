@@ -455,6 +455,10 @@ resource "kubernetes_manifest" "service_productpage" {
       }
     }
   }
+  lifecycle {
+    ignore_changes = [
+    ]
+  }
 }
 
 resource "kubernetes_manifest" "serviceaccount_bookinfo_productpage" {

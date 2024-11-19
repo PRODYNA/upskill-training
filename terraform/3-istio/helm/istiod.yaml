@@ -1,1 +1,10 @@
-#profile: ambient
+profile: ambient
+meshConfig:
+  enableTracing: true
+  extensionProviders:
+    - name: otel-tracing
+      opentelemetry:
+        port: 4317
+        service: opentelemetry-collector.observability
+        resource_detectors:
+          environment: {}
