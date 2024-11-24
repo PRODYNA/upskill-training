@@ -3,10 +3,10 @@
 ########################
 
 resource "azurerm_kubernetes_cluster" "main" {
-  location                          = azurerm_resource_group.main.location
+  location                          = data.azurerm_resource_group.main.location
   name                              = "${local.resource_prefix}-aks"
-  resource_group_name               = azurerm_resource_group.main.name
-  node_resource_group               = "${local.resource_prefix}-aks-resources"
+  resource_group_name               = data.azurerm_resource_group.main.name
+  //node_resource_group               = "${local.resource_prefix}-aks-resources"
   dns_prefix                        = "kubernetes"
   tags                              = local.tags
   kubernetes_version                = var.aks.version.control_plane
@@ -100,7 +100,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "user" {
 # # for nginx to be able to get the ip
 resource "azurerm_role_assignment" "aks_rg_nw_contr" {
   principal_id         = azurerm_kubernetes_cluster.main.identity[0].principal_id
-  scope                = azurerm_resource_group.main.id
+  scope                = data.azurerm_resource_group.main.id
   role_definition_name = "Network Contributor"
 }
 
@@ -120,9 +120,10 @@ resource "azurerm_role_assignment" "aks_acr_pull" {
 #
 resource "terraform_data" "get-credentials" {
   provisioner "local-exec" {
-    command = "az aks get-credentials -g ${azurerm_resource_group.main.name} -n ${azurerm_kubernetes_cluster.main.name} --overwrite-existing"
+    command = "az aks get-credentials -g ${data.azurerm_resource_group.main.name} -n ${azurerm_kubernetes_cluster.main.name} --overwrite-existing"
   }
   depends_on = [
     azurerm_role_assignment.aks_cluster_admin_to_sp
   ]
+
 }

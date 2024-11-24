@@ -1,5 +1,5 @@
 output "resource_group" {
-  value = azurerm_resource_group.main
+  value = data.azurerm_resource_group.main
 }
 
 output "kubernetes_cluster" {
@@ -35,7 +35,7 @@ output "subscription_id" {
 }
 
 output "resource_group_name" {
-  value = azurerm_resource_group.main.name
+  value = data.azurerm_resource_group.main.name
 }
 
 output "fq_image_name" {

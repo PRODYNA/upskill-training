@@ -1,12 +1,13 @@
 resource "azurerm_key_vault" "main" {
   name                = "${var.project_name}-kv"
-  location            = azurerm_resource_group.main.location
-  resource_group_name = azurerm_resource_group.main.name
+  location            = data.azurerm_resource_group.main.location
+  resource_group_name = data.azurerm_resource_group.main.name
   sku_name            = "standard"
   tenant_id           = data.azurerm_client_config.current.tenant_id
   tags                = local.tags
 
   enable_rbac_authorization = true
+  purge_protection_enabled = false
 }
 
 resource "azurerm_role_assignment" "kvofficer" {

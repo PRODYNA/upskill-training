@@ -2,6 +2,10 @@ variable "subscription_id" {
   type = string
 }
 
+variable "resource_group_name" {
+  type = string
+}
+
 variable "location" {
   type    = string
   default = "germanywestcentral"
@@ -47,7 +51,7 @@ variable "aks" {
   })
   default = {
     default_node_pool = {
-      vm_size   = "Standard_B2ms"
+      vm_size   = "Standard_B2s_v2"
       min_count = 1
       max_count = 4
     }
