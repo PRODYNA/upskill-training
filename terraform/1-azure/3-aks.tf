@@ -6,7 +6,7 @@ resource "azurerm_kubernetes_cluster" "main" {
   location                          = data.azurerm_resource_group.main.location
   name                              = "${local.resource_prefix}-aks"
   resource_group_name               = data.azurerm_resource_group.main.name
-  //node_resource_group               = "${local.resource_prefix}-aks-resources"
+  node_resource_group               = "${local.resource_prefix}-aks-resources"
   dns_prefix                        = "kubernetes"
   tags                              = local.tags
   kubernetes_version                = var.aks.version.control_plane

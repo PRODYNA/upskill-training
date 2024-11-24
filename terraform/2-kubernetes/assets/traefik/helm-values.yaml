@@ -1,5 +1,6 @@
 deployment:
-  kind: DaemonSet
+  #kind: DaemonSet
+  kind: Deployment
   replicas: null
   revisionHistoryLimit: 3
   annotations: {}
