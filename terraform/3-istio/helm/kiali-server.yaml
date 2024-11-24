@@ -1,0 +1,32 @@
+auth:
+  strategy: anonymous
+external_services:
+  prometheus:
+    url: "http://kube-prometheus-stack-prometheus.observability:9090/"
+  grafana:
+    enabled: true
+    auth:
+      ca_file: ""
+      insecure_skip_verify: false
+      password: "prom-operator"
+      token: ""
+      type: "basic"
+      use_kiali_token: false
+      username: "admin"
+    # Grafana service name is "grafana" and is in the "telemetry" namespace.
+    internal_url: 'http://kube-prometheus-stack-grafana.observability/'
+    # Public facing URL of Grafana
+    external_url: 'dummy'
+    dashboards:
+      - name: "Istio Service Dashboard"
+        variables:
+          namespace: "var-namespace"
+          service: "var-service"
+      - name: "Istio Workload Dashboard"
+        variables:
+          namespace: "var-namespace"
+          workload: "var-workload"
+      - name: "Istio Mesh Dashboard"
+      - name: "Istio Control Plane Dashboard"
+      - name: "Istio Performance Dashboard"
+      - name: "Istio Wasm Extension Dashboard"

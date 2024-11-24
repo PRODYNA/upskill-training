@@ -1,0 +1,146 @@
+deployment:
+  #kind: DaemonSet
+  kind: Deployment
+  replicas: null
+  revisionHistoryLimit: 3
+  annotations: {}
+  podAnnotations: {}
+ingressClass:  # @schema additionalProperties: false
+  enabled: true
+  isDefaultClass: false
+  name: "traefik"
+
+experimental:
+  kubernetesGateway:
+    enabled: true
+
+gatewayClass:  # @schema additionalProperties: false
+  enabled: true
+  name: ""
+  labels: {}
+
+ingressRoute:
+  dashboard:
+    enabled: true
+  healthcheck:
+    enabled: true
+#    entryPoints:
+#      - traefik
+#      - web
+#      - websecure
+
+providers:  # @schema additionalProperties: false
+  kubernetesCRD:
+    enabled: true
+  kubernetesIngress:
+    enabled: true
+    publishedService:
+      enabled: true
+  kubernetesGateway:
+    enabled: true
+    experimentalChannel: false
+
+logs:
+  general:
+    format: json # @schema enum:["common", "json", null]; type:[string, null]; default: "common"
+    noColor: true
+  access:
+    enabled: true
+    format: json # @schema enum:["common", "json", null]; type:[string, null]; default: "common"
+
+metrics:
+  addInternals: true
+  prometheus:
+    serviceMonitor:
+      enabled: true
+  otlp:
+    # -- Set to true in order to enable the OpenTelemetry metrics
+    enabled: false
+    grpc:
+      enabled: true
+      # -- Format: <scheme>://<host>:<port><path>. Default: http://localhost:4318/v1/metrics
+      endpoint: "opentelemetry-collector.observability:4317"
+      # -- Allows reporter to send metrics to the OpenTelemetry Collector without using a secured protocol.
+      insecure: true
+
+tracing:  # @schema additionalProperties: false
+  addInternals: false
+  otlp:
+    enabled: true
+    grpc:
+      enabled: true
+      insecure: true
+      endpoint: "opentelemetry-collector.observability:4317"
+
+# -- Global command arguments to be passed to all traefik's pods
+globalArguments: []
+
+additionalArguments: []
+env: []
+envFrom: []
+
+ports:
+  traefik:
+    port: 8080
+    nodePort: 30880
+    expose:
+      default: true
+  web:
+    nodePort: 30080
+    redirectTo:
+      port: websecure
+    proxyProtocol:
+      insecure: true
+    forwardedHeaders:
+      insecure: true
+  websecure:
+    nodePort: 30443
+    proxyProtocol:
+      insecure: true
+    forwardedHeaders:
+      insecure: true
+
+service:
+  single: true
+  spec:
+    externalTrafficPolicy: "Local"
+  annotations:
+    service.beta.kubernetes.io/port_80_health-probe_protocol: "http"
+    service.beta.kubernetes.io/port_80_health-probe_port: "8080" # Must match ports.traefik.port
+    service.beta.kubernetes.io/port_80_health-probe_request-path: "/ping"
+    service.beta.kubernetes.io/port_443_health-probe_protocol: "http"
+    service.beta.kubernetes.io/port_443_health-probe_port: "8080" # Must match ports.traefik.port
+    service.beta.kubernetes.io/port_443_health-probe_request-path: "/ping"
+    service.beta.kubernetes.io/port_8080_no_lb_rule: "true" # Do not create a load balancer rule for port 8080
+
+autoscaling:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 3
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 80
+
+resources:
+  requests:
+    cpu: "100m"
+    memory: "50Mi"
+  limits:
+    cpu: "300m"
+    memory: "150Mi"
+
+affinity:
+  podAntiAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      - labelSelector:
+          matchLabels:
+            app.kubernetes.io/name: '{{ template "traefik.name" . }}'
+            app.kubernetes.io/instance: '{{ .Release.Name }}-{{ .Release.Namespace }}'
+        topologyKey: kubernetes.io/hostname
+
+gateway:
+  namespacePolicy: All

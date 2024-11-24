@@ -1,0 +1,5 @@
+global:
+acme:
+  environment: letsencrypt
+  email: "darko.krizic@prodyna.com"
+  httpSolverIngressClass: "traefik"

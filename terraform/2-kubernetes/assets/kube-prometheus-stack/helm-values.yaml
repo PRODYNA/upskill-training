@@ -1,0 +1,25 @@
+grafana:
+  ingress:
+    enabled: true
+    ingressClassName: traefik
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-traefik
+    path: /grafana/
+    pathType: Prefix
+    hosts:
+      - dummy
+    tls:
+      - secretName: grafana-tls
+        hosts:
+          - dummy
+  grafana.ini:
+    server:
+      root_url: "https://%(domain)s/grafana/"
+      serve_from_sub_path: true
+prometheus:
+  prometheusSpec:
+    ruleSelectorNilUsesHelmValues: false
+    serviceMonitorSelectorNilUsesHelmValues: false
+    serviceMonitorNamespaceSelectorNilUsesHelmValues: false
+    podMonitorSelectorNilUsesHelmValues: false
+    podMonitorNamespaceSelectorNilUsesHelmValues: false

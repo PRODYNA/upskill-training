@@ -1,0 +1,24 @@
+# resource "kubernetes_manifest" "ciliumclusterwidenetworkpolicy_allow_ambient_hostprobes" {
+#   manifest = {
+#     "apiVersion" = "cilium.io/v2"
+#     "kind" = "CiliumClusterwideNetworkPolicy"
+#     "metadata" = {
+#       "name" = "allow-ambient-hostprobes"
+#     }
+#     "spec" = {
+#       "description" = "Allows SNAT-ed kubelet health check probes into ambient pods"
+#       "enableDefaultDeny" = {
+#         "egress" = false
+#         "ingress" = false
+#       }
+#       "endpointSelector" = {}
+#       "ingress" = [
+#         {
+#           "fromCIDR" = [
+#             "169.254.7.127/32",
+#           ]
+#         },
+#       ]
+#     }
+#   }
+# }
