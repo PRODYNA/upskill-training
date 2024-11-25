@@ -92,6 +92,7 @@ config:
       traces:
         exporters:
           - azuremonitor
+          - debug
         processors:
           - memory_limiter
           - batch
