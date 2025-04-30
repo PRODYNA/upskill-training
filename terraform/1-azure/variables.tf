@@ -2,18 +2,15 @@ variable "subscription_id" {
   type = string
 }
 
+/*
 variable "resource_group_name" {
   type = string
 }
+ */
 
 variable "location" {
   type    = string
   default = "germanywestcentral"
-}
-
-variable "environment" {
-  type    = string
-  default = "dev"
 }
 
 variable "project_name" {
@@ -27,7 +24,7 @@ variable "cloudflare_zone_id" {
 
 variable "cloudflare_api_token" {
   type    = string
-  default = "wApUkUdY6vlXcFCW_G3tKXbkgl1dYKEjh_1jaV5j" # should be in a secret
+  default = "unr2btjY2cmxfg7rGKHAm789FaLASpRg3s6g0oM7" # should be in a secret
 }
 
 variable "aks" {
@@ -63,8 +60,8 @@ variable "aks" {
     }
 
     version = {
-      control_plane = "1.30.5"
-      node_pool     = "1.30.5"
+      control_plane = "1.30.7"
+      node_pool     = "1.30.7"
     }
   }
 }

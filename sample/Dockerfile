@@ -1,4 +1,4 @@
-FROM golang:1.22.2-alpine3.19 AS build
+FROM golang:1.24-alpine3.21 AS build
 
 WORKDIR /build
 COPY . .
@@ -6,7 +6,7 @@ COPY . .
 RUN go get
 RUN go build -o sample
 
-FROM alpine:3.19
+FROM alpine:3.21
 
 COPY --from=build /build/sample /
 
