@@ -1,6 +1,7 @@
 module github.com/prodyna/upskill-training/sample
 
 go 1.22.2
+toolchain go1.24.1
 
 require (
 	github.com/go-chi/chi/v5 v5.2.0
@@ -8,7 +9,7 @@ require (
 	github.com/lmittmann/tint v1.0.5
 	github.com/prometheus/client_golang v1.20.5
 	github.com/redis/go-redis/extra/redisotel/v9 v9.7.0
-	github.com/redis/go-redis/v9 v9.7.0
+	github.com/redis/go-redis/v9 v9.7.3
 	github.com/riandyrn/otelchi v0.10.1
 	github.com/samber/slog-chi v1.13.1
 	go.opentelemetry.io/otel v1.31.0
@@ -40,9 +41,9 @@ require (
 	github.com/prometheus/procfs v0.15.1 // indirect
 	github.com/redis/go-redis/extra/rediscmd/v9 v9.7.0 // indirect
 	go.opentelemetry.io/proto/otlp v1.3.1 // indirect
-	golang.org/x/net v0.30.0 // indirect
-	golang.org/x/sys v0.26.0 // indirect
-	golang.org/x/text v0.19.0 // indirect
+	golang.org/x/net v0.38.0 // indirect
+	golang.org/x/sys v0.31.0 // indirect
+	golang.org/x/text v0.23.0 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20241021214115-324edc3d5d38 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20241021214115-324edc3d5d38 // indirect
 	google.golang.org/protobuf v1.35.1 // indirect
