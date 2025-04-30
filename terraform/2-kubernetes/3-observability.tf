@@ -8,7 +8,7 @@ resource "kubernetes_namespace" "observability" {
   }
 }
 
-resource "kubernetes_secret" "azuremonitorr" {
+resource "kubernetes_secret" "azuremonitor" {
   metadata {
     name      = "azuremonitor"
     namespace = kubernetes_namespace.observability.metadata[0].name
