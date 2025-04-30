@@ -87,8 +87,11 @@ ports:
       default: true
   web:
     nodePort: 30080
-    redirectTo:
-      port: websecure
+    redirections:
+      entryPoint:
+        to: websecure
+        scheme: https
+        permanent: true
     proxyProtocol:
       insecure: true
     forwardedHeaders:
