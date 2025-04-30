@@ -4,6 +4,7 @@ resource "kubernetes_namespace" "redis" {
   }
 }
 
+/*
 resource "helm_release" "redis" {
   name       = "redis"
   repository = "https://charts.bitnami.com/bitnami"
@@ -14,3 +15,4 @@ resource "helm_release" "redis" {
     value = "false"
   }
 }
+*/

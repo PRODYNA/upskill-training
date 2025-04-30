@@ -5,6 +5,7 @@ resource "kubernetes_namespace" "sample" {
   }
 }
 ## Deploy the application
+/*
 resource "helm_release" "sample" {
   name      = "sample"
   chart     = "../../helm/sample"
@@ -34,3 +35,4 @@ resource "helm_release" "sample" {
     file("assets/sample/helm-values.yaml")
   ]
 }
+*/
