@@ -19,6 +19,7 @@ resource "kubernetes_secret" "azuremonitor" {
   type = "Opaque"
 }
 
+/*
 resource "helm_release" "kube-prometheus-stack" {
   repository = "https://prometheus-community.github.io/helm-charts"
   chart      = "kube-prometheus-stack"
@@ -42,6 +43,7 @@ resource "helm_release" "kube-prometheus-stack" {
     value = data.terraform_remote_state.azure.outputs.traefik_name
   }
 }
+*/
 
 # https://artifacthub.io/packages/helm/opentelemetry-helm/opentelemetry-collector
 resource "helm_release" "opentelemetry-collector" {
