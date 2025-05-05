@@ -22,8 +22,16 @@ spec:
           name: http
         resources:
           requests:
-            cpu: 200m
-            memory: 256Mi
+            cpu: 100m
+            memory: 128Mi
           limits:
             cpu: 200m
             memory: 256Mi
+        readinessProbe:
+          httpGet:
+            scheme: HTTP
+            port: http
+            path: /
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 5
