@@ -19,7 +19,7 @@ env:
   - name: "OPENTELEMETRY_ENDPOINT"
     value: "opentelemetry-collector.observability:4317"
   - name: REDIS_ENABLED
-    value: "true"
+    value: "false"
   - name: REDIS_ENDPOINT
     value: "redis-master.redis:6379"
 autoscaling:
@@ -35,4 +35,4 @@ resources:
     cpu: 100m
     memory: 128Mi
 serviceMonitor:
-  enabled: true
+  enabled: false
