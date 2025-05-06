@@ -1,7 +1,7 @@
 prometheus:
   enabled: true
   servicemonitor:
-    enabled: true
+    enabled: false
 config:
   enableGatewayAPI: true
 crds:
