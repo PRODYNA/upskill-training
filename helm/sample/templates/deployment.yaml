@@ -52,13 +52,10 @@ spec:
             {{- toYaml .Values.env | nindent 12 }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-          {{- with .Values.volumeMounts }}
           volumeMounts:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
+            - mountPath: /test
+              name: static
       {{- with .Values.volumes }}
-      volumes:
-        {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
@@ -72,3 +69,7 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      volumes:
+        - name: static
+          configMap:
+            name: static
