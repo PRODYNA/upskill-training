@@ -52,7 +52,7 @@ metrics:
   addInternals: true
   prometheus:
     serviceMonitor:
-      enabled: true
+      enabled: false
   otlp:
     # -- Set to true in order to enable the OpenTelemetry metrics
     enabled: false

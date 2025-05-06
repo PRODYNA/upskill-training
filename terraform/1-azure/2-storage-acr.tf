@@ -9,4 +9,10 @@ resource "azurerm_container_registry" "main" {
   sku                 = "Basic"
   tags                = local.tags
   admin_enabled       = true
+
+  lifecycle {
+    ignore_changes = [
+      tags
+    ]
+  }
 }
