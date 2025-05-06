@@ -103,3 +103,17 @@ serviceMonitor:
   enabled: false
 
 staticFiles: []
+
+initContainers: []
+  # - name: init-myservice
+  #   image: busybox
+  #   command: ['sh', '-c', 'echo Init Container']
+  #   volumeMounts:
+  #     - name: static
+  #       mountPath: /static
+
+persistentVolumeClaim:
+  enabled: false
+  storageClassName: ""
+  accessMode: ReadWriteOnce
+  size: 1Gi
