@@ -6,6 +6,7 @@ metadata:
     # This tell cert-manager to use the ClusterIssuer named letsencrypt-sample
     cert-manager.io/cluster-issuer: letsencrypt-traefik
 spec:
+  ingressClassName: traefik
   rules:
     - host: "darko3.prodyna.wtf"
       http:
