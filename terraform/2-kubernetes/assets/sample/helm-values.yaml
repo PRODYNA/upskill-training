@@ -16,8 +16,8 @@ ingress:
           pathType: ImplementationSpecific
 
 env:
-  - name: "OPENTELEMETRY_ENDPOINT"
-    value: "opentelemetry-collector.observability:4317"
+#  - name: "OPENTELEMETRY_ENDPOINT"
+#    value: "opentelemetry-collector.observability:4317"
   - name: REDIS_ENABLED
     value: "false"
   - name: REDIS_ENDPOINT
