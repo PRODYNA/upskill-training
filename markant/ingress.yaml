@@ -14,3 +14,7 @@ spec:
                 name: myapp
                 port:
                   number: 80
+  tls:
+    - hosts:
+        - "darko3.prodyna.wtf"
+      secretName: myapp-tls
