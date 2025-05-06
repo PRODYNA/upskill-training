@@ -53,7 +53,7 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
-            - mountPath: /test
+            - mountPath: /static
               name: static
       {{- with .Values.volumes }}
       {{- end }}
