@@ -101,3 +101,5 @@ env: []
 
 serviceMonitor:
   enabled: false
+
+staticFiles: []

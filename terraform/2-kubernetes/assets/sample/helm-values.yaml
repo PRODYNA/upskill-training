@@ -36,3 +36,24 @@ resources:
     memory: 128Mi
 serviceMonitor:
   enabled: false
+staticFiles:
+  - filename: index.html
+    content: |
+      <html>
+        <head>
+         <title>Greeting to Markant</title>
+        </head>
+        <body>
+          <h1>Greetings to Markant</h1>
+          <p>This content comes from the configmap.</p>
+        </body>
+      </html>
+
+volumes:
+  - name: static
+    configMap:
+      name: sample
+
+volumeMounts:
+  - name: static
+    mountPath: /static
