@@ -50,16 +50,13 @@ staticFiles:
       </html>
 
 volumes:
-  - name: static
-    configMap:
-      name: sample
   - name: persistent
     persistentVolumeClaim:
       claimName: sample
 
 volumeMounts:
-  - name: static
-    mountPath: /static
+  - name: persistent
+    mountPath: /persistent
 
 persistentVolumeClaim:
   enabled: true
