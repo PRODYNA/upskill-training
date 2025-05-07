@@ -60,7 +60,7 @@ volumeMounts:
 
 persistentVolumeClaim:
   enabled: true
-  storageClass: "azurefile"
+  storageClassName: "azurefile"
   accessMode: ReadWriteMany
   size: "1Gi"
 
