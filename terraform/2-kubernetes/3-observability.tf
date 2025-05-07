@@ -44,14 +44,14 @@ resource "helm_release" "kube-prometheus-stack" {
 }
 
 # https://artifacthub.io/packages/helm/opentelemetry-helm/opentelemetry-collector
-# resource "helm_release" "opentelemetry-collector" {
-#   repository       = "https://open-telemetry.github.io/opentelemetry-helm-charts"
-#   chart            = "opentelemetry-collector"
-#   name             = "opentelemetry-collector"
-#   namespace        = kubernetes_namespace.observability.metadata[0].name
-#   version          = "0.86.1"
-#   create_namespace = false
-#   force_update     = true
-#
-#   values = [file("assets/opentelemetry-collector/helm-values.yaml")]
-# }
+resource "helm_release" "opentelemetry-collector" {
+  repository       = "https://open-telemetry.github.io/opentelemetry-helm-charts"
+  chart            = "opentelemetry-collector"
+  name             = "opentelemetry-collector"
+  namespace        = kubernetes_namespace.observability.metadata[0].name
+  version          = "0.86.1"
+  create_namespace = false
+  force_update     = true
+
+  values = [file("assets/opentelemetry-collector/helm-values.yaml")]
+}
