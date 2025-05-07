@@ -7,6 +7,9 @@ spec:
   jobTemplate:
     spec:
       template:
+        metadata:
+          labels:
+             cronjob: hello
         spec:
           containers:
           - name: hello
