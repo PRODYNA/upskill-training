@@ -53,10 +53,15 @@ volumes:
   - name: persistent
     persistentVolumeClaim:
       claimName: sample
+  - name: static
+    configMap:
+      name: sample
 
 volumeMounts:
   - name: persistent
     mountPath: /persistent
+  - name: static
+    mountPath: /static
 
 persistentVolumeClaim:
   enabled: true
