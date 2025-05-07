@@ -35,7 +35,7 @@ resources:
     cpu: 100m
     memory: 128Mi
 serviceMonitor:
-  enabled: false
+  enabled: true
 staticFiles:
   - filename: index.html
     content: |
