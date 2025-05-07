@@ -3,9 +3,9 @@ kind: PersistentVolumeClaim
 metadata:
   name: sample-data
 spec:
-  storageClassName: "default" # Empty string must be explicitly set otherwise default StorageClass will be set
+  storageClassName: "azurefile" # Empty string must be explicitly set otherwise default StorageClass will be set
   accessModes:
-  - ReadWriteOnce
+  - ReadWriteMany
   resources:
     requests:
       storage: 100Mi
