@@ -1,0 +1,14 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: hello
+spec:
+  schedule: "* * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: hello
+              image: hello-world
+          restartPolicy: OnFailure
