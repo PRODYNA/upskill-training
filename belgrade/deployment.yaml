@@ -5,7 +5,7 @@ metadata:
   labels:
     app: demo
 spec:
-  replicas: 2
+  replicas: 5
   selector:
     matchLabels:
       app: demo
@@ -17,6 +17,21 @@ spec:
       containers:
         - name: demo
           image: nginx
+          readinessProbe:
+            httpGet:
+              port: 80
+              path: /
+            initialDelaySeconds: 5
+            failureThreshold: 1
+            successThreshold: 3
+            periodSeconds: 2
           ports:
             - containerPort: 80
               name: http
+          resources:
+            requests:
+              cpu: 82m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 128Mi
