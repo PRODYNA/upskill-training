@@ -4,6 +4,7 @@ metadata:
   name: demo
   labels:
     app: demo
+    training: belgrade
 spec:
   containers:
     - name: demo
