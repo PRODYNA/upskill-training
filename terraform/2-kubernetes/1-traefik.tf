@@ -16,12 +16,13 @@ resource "helm_release" "traefik" {
 
   set {
     name  = "service.annotations.service\\.beta\\.kubernetes\\.io/azure-load-balancer-resource-group"
-    value = data.azurerm_resource_group.main.name
+    # lowercase to avoid issues with the dot in the name
+    value = lower(data.azurerm_resource_group.main.name)
   }
 
   set {
     name = "service.annotations.service\\.beta\\.kubernetes\\.io/azure-pip-name"
-    value = data.azurerm_public_ip.traefik.name
+    value = lower(data.azurerm_public_ip.traefik.name)
   }
 
   // --set
