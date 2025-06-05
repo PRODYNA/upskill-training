@@ -5,7 +5,7 @@ metadata:
   labels:
     app: demo
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: demo
@@ -26,27 +26,11 @@ spec:
             failureThreshold: 1
             successThreshold: 3
             periodSeconds: 2
-          env:
-            - name: LOGFORMAT
-              valueFrom:
-                configMapKeyRef:
-                  name: demo
-                  key: LOGFORMAT
-            - name: COLOR
-              valueFrom:
-                configMapKeyRef:
-                  name: demo
-                  key: COLOR
-            - name: DATABASE_USERNAME
-              valueFrom:
-                configMapKeyRef:
-                  name: demo
-                  key: DATABASE_USERNAME
-            - name: DATABASE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: demo
-                  key: DATABASE_PASSWORD
+          envFrom:
+            - configMapRef:
+                name: demo
+            - secretRef:
+                name: demo
           ports:
             - name: http
               containerPort: 8000
@@ -57,3 +41,10 @@ spec:
             limits:
               cpu: 200m
               memory: 128Mi
+          volumeMounts:
+            - name: static
+              mountPath: /static
+      volumes:
+        - name: static
+          persistentVolumeClaim:
+            claimName: demo-rwx
