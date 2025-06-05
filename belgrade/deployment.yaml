@@ -16,18 +16,19 @@ spec:
     spec:
       containers:
         - name: demo
-          image: nginx
+          image: darkocr.azurecr.io/sample:1.1
+          imagePullPolicy: Always
           readinessProbe:
             httpGet:
-              port: 80
-              path: /
+              port: http
+              path: /health
             initialDelaySeconds: 5
             failureThreshold: 1
             successThreshold: 3
             periodSeconds: 2
           ports:
-            - containerPort: 80
-              name: http
+            - name: http
+              containerPort: 8000
           resources:
             requests:
               cpu: 82m
