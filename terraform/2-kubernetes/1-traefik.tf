@@ -28,7 +28,7 @@ resource "helm_release" "traefik" {
   // --set
   set {
     name  = "service.loadBalancerIP"
-    value = data.azurerm_public_ip.traefik.ip_address
+    value = lower(data.azurerm_public_ip.traefik.ip_address)
   }
 
   // -f
