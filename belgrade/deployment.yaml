@@ -14,6 +14,20 @@ spec:
       labels:
         app: demo
     spec:
+      initContainers:
+        - name: copy-static
+          image: busybox
+          # Copy the files, but resolve symclinks to ensure the files are copied correctly
+          command:
+            - 'sh'
+            - '-c'
+            - "cp -Lnvr /source/* /target/]"
+          volumeMounts:
+            - name: static
+              mountPath: /source
+              readOnly: true
+            - name: data
+              mountPath: /target
       containers:
         - name: demo
           image: darkocr.azurecr.io/sample:1.1
@@ -22,10 +36,6 @@ spec:
             httpGet:
               port: http
               path: /health
-            initialDelaySeconds: 5
-            failureThreshold: 1
-            successThreshold: 3
-            periodSeconds: 2
           envFrom:
             - configMapRef:
                 name: demo
@@ -42,19 +52,12 @@ spec:
               cpu: 200m
               memory: 128Mi
           volumeMounts:
-            - name: static
+            - name: data
               mountPath: /static
-              readOnly: true
-            - name: demo-config
-              mountPath: /config
-              readOnly: true
       volumes:
-        - name: demo
+        - name: data
           persistentVolumeClaim:
             claimName: demo-rwx
         - name: static
           configMap:
             name: demo-static
-        - name: demo-config
-          configMap:
-            name: demo
