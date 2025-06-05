@@ -5,7 +5,7 @@ metadata:
   labels:
     app: demo
 spec:
-  replicas: 5
+  replicas: 3
   selector:
     matchLabels:
       app: demo
@@ -26,6 +26,27 @@ spec:
             failureThreshold: 1
             successThreshold: 3
             periodSeconds: 2
+          env:
+            - name: LOGFORMAT
+              valueFrom:
+                configMapKeyRef:
+                  name: demo
+                  key: LOGFORMAT
+            - name: COLOR
+              valueFrom:
+                configMapKeyRef:
+                  name: demo
+                  key: COLOR
+            - name: DATABASE_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: demo
+                  key: DATABASE_USERNAME
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: demo
+                  key: DATABASE_PASSWORD
           ports:
             - name: http
               containerPort: 8000

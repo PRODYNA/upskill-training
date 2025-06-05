@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: demo
+data:
+  COLOR: "red"
+  DATABASE_USERNAME: "admin"
+  LOGFORMAT: "text"
