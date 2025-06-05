@@ -44,7 +44,17 @@ spec:
           volumeMounts:
             - name: static
               mountPath: /static
+              readOnly: true
+            - name: demo-config
+              mountPath: /config
+              readOnly: true
       volumes:
-        - name: static
+        - name: demo
           persistentVolumeClaim:
             claimName: demo-rwx
+        - name: static
+          configMap:
+            name: demo-static
+        - name: demo-config
+          configMap:
+            name: demo
