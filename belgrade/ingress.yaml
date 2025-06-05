@@ -3,6 +3,7 @@ kind: Ingress
 metadata:
   name: demo
 spec:
+  ingressClassName: traefik
   rules:
     - host: "darko.prodyna.wtf"
       http:
