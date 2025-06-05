@@ -21,7 +21,7 @@ spec:
           command:
             - 'sh'
             - '-c'
-            - "cp -Lnvr /source/* /target/]"
+            - "cp -Lnvr /source/* /target/"
           volumeMounts:
             - name: static
               mountPath: /source
