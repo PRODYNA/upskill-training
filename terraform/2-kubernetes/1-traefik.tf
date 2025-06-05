@@ -24,12 +24,13 @@ resource "helm_release" "traefik" {
     value = data.azurerm_public_ip.traefik.name
   }
 
-
+  // --set
   set {
     name  = "service.loadBalancerIP"
     value = data.azurerm_public_ip.traefik.ip_address
   }
 
+  // -f
   values = [
     file("assets/traefik/helm-values.yaml")
   ]
