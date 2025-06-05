@@ -3,11 +3,11 @@ kind: Service
 metadata:
   name: demo
 spec:
+  type: ClusterIP
   selector:
     app: demo
   ports:
-    - protocol: TCP
+    - name: http
+      protocol: TCP
       port: 80
-      targetPort: 80
-      name: http
-g
+      targetPort: http
