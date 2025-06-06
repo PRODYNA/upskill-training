@@ -6,3 +6,4 @@ data:
   COLOR: "red"
   DATABASE_USERNAME: "admin"
   LOGFORMAT: "text"
+  OPENTELEMETRY_ENDPOINT: "opentelemetry-collector.observability:4317"
